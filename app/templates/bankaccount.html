@@ -1,0 +1,79 @@
+{% extends "budget/base.html" %}
+
+{% block breadcrumb %}
+	<li><a href="{% url 'budget:alltransactions' %}">All Transactions</a></li>
+	<li><a href="{% url 'budget:addtransactions' %}" class="strikethrough">Add Transactions</a></li>
+	<li><a href="{% url 'budget:category' account.category.id %}">{{ account.category.name }}</a></li>
+	<li class="active"><a href="{% if month_persist %}{% url 'budget:account' account.id month year %}{% else %}{% url 'budget:account' account.id %}{% endif %}">{{ account.name }}</a></li>
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-xs-9">
+            <h2>Fund Allocation</h2>
+            <br />
+            <table class="table">
+            <tr><th>Account</th><th>Current Allocation</th></tr>
+            {% for sub in subaccounts %}
+            <tr><td><a href="{% url 'budget:account' sub.id %}">{{ sub.name }}</td><td>${{ sub.balance }}</td></tr>
+            {% endfor %}
+            <tr><td><strong>Unallocated Balance:</strong></td><td>${{ account.balance }}</td>
+            <tr><td><strong>Total Balance:</strong></td><td>${{ total_balance }}</td>
+            </table>
+        
+			<h2>Transfers for {{ account.name }}</h2>
+			<br />
+			<table class="table">
+			<tr><th>Date</th><th>Account</th><th>Deposit</th><th>Withdrawal</th><th>Memo</th><th>Edit</th></tr>
+			{% for t in transactions %}
+				<tr><td>{{ t.date }}</td>
+				{% if t.to_account|cut:" " == account.name|cut:" " %}
+					<td><a href="{% url 'budget:account' t.from_account.id %}">{{ t.from_account }}</a></td><td>${{ t.amount }}</td><td></td>
+				{% else %}
+					<td><a href="{% url 'budget:account' t.to_account.id %}">{{ t.to_account }}</a></td><td></td><td>${{ t.amount }}</td>
+				{% endif %}
+				<td>{{ t.memo }}</td>
+				<td><a href="{% url 'budget:transaction' t.id account.id %}">Edit</a></td></tr>
+			{% endfor %}
+			<tr><td></td><td><strong>Monthly Balance:</strong></td><td>${{ balance }}</td><td colspan="3"></td></tr>
+            </table>
+		</div>
+		<div class="col-xs-3 text-center">
+			<div class="row">
+				<div class="col-xs-12">
+					<h3>Select Date</h3>
+					{% include "budget/month_selection.html" %}
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col-xs-12">
+					{% if bank %}
+						<a href="{% url 'budget:banktransaction' %}" class="btn btn-success">Transfer Funds</a>
+					{% else %}
+						<a href="{% url 'budget:addtransaction' account.id %}" class="btn btn-success">Add New Transaction</a>
+					{% endif %}
+				</div>
+			</div>
+			<br />
+			{% if bank %}
+			<div class="row">
+				<div class="col-xs-12">
+					<a href="{% url 'budget:addsubaccount' account.id %}" class="btn btn-info">Add Sub-account</a>
+				</div>
+			</div>
+			<br />
+			{% endif %}
+			<div class="row">
+				<div class="col-xs-12">
+					<a href="{% url 'budget:editaccount' account.id %}" class="btn btn-warning">Edit Account</a>
+				</div>
+			</div>
+			<br />
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascript %}
+	<script src="/static/budget/js/month_selection.js" type="text/javascript"></script>
+{% endblock %}
