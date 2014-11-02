@@ -4,7 +4,8 @@
 
 var budgetTrackerControllers = angular.module('budgetTrackerControllers', []);
 
-budgetTrackerControllers.controller('IndexCtrl', ['$scope', 'Account', 'Transaction', 
+budgetTrackerControllers.controller('IndexCtrl', 
+  ['$scope', 'Account', 'Transaction', 
   function($scope, Account, Transaction) {
     /*$scope.phones = Phone.query();
     $scope.orderProp = 'age';*/
@@ -21,12 +22,13 @@ budgetTrackerControllers.controller('IndexCtrl', ['$scope', 'Account', 'Transact
     }
   }]);*/
 
-budgetTrackerControllers.controller('AccountCtrl', ['$scope', 'Account', 'Transaction', 
-  function($scope, Account, Transaction) {
+budgetTrackerControllers.controller('AccountCtrl', 
+  ['$scope', '$routeParams', 'Account', 'Transaction', 
+  function($scope, $routeParams, Account, Transaction) {
     
   }]);
 
-budgetTrackerControllers.controller('TransactionCtrl', ['$scope', 'Transaction',
-  function($scope, Transaction) {
+budgetTrackerControllers.controller('TransactionCtrl', ['$scope', '$routeParams', 'Transaction',
+  function($scope, $routeParams, Transaction) {
     
   }]);
