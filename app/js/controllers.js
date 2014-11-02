@@ -4,6 +4,37 @@
 
 var budgetTrackerControllers = angular.module('budgetTrackerControllers', []);
 
+//https://medium.com/opinionated-angularjs/techniques-for-authentication-in-angularjs-applications-7bbf0346acec
+
+budgetTrackerControllers.controller('LoginCtrl', 
+  ['$scope', '$rootScope', 'AUTH_EVENTS', 'AuthService'],
+  function ($scope, $rootScope, AUTH_EVENTS, AuthService) {
+  $scope.credentials = {
+    username: '',
+    password: ''
+  };
+  $scope.login = function (credentials) {
+    AuthService.login(credentials).then(function (user) {
+      $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+      $scope.setCurrentUser(user);
+    }, function () {
+      $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
+    });
+  };
+});
+
+budgetTrackerControllers.controller('ApplicationCtrl', 
+  ['$scope', 'USER_ROLES', 'AuthService'],
+  function ($scope, USER_ROLES, AuthService) {
+    $scope.currentUser = null;
+    $scope.userRoles = USER_ROLES;
+    $scope.isAuthorized = AuthService.isAuthorized;
+
+    $scope.setCurrentUser = function (user) {
+      $scope.currentUser = user;
+    };
+});
+
 budgetTrackerControllers.controller('IndexCtrl', 
   ['$scope', 'Account', 'Transaction', 
   function($scope, Account, Transaction) {

@@ -10,11 +10,15 @@ var budgetTrackerApp = angular.module('budgetTrackerApp', [
 
 budgetTrackerApp.config(['$routeProvider',
   function($routeProvider) {
-    $routeProvider.
-      when('/', {
+    $routeProvider
+      .when('/', {
         templateUrl: 'partials/home.html',
         controller: 'IndexCtrl'
-      }).
+      })
+      .when('/auth', {
+          templateUrl: 'partials/auth.html',
+          controller: 'LoginCtrl'
+      })
       /*when('/phones/:phoneId', {
         templateUrl: 'partials/phone-detail.html',
         controller: 'PhoneDetailCtrl'
@@ -22,7 +26,7 @@ budgetTrackerApp.config(['$routeProvider',
       otherwise({
         redirectTo: '/phones'
       });*/
-      otherwise({
+      .otherwise({
           redirectTo: '/'
       });
   }]);
