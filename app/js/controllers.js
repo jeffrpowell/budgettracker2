@@ -26,7 +26,7 @@ budgetTrackerControllers.controller('LoginCtrl',
   ['$scope', '$rootScope', 'AUTH_EVENTS', 'AuthService',
   function ($scope, $rootScope, AUTH_EVENTS, AuthService) {
   $scope.credentials = {
-    username: '',
+    email: '',
     password: ''
   };
   $scope.login = function (credentials) {
@@ -42,13 +42,13 @@ budgetTrackerControllers.controller('LoginCtrl',
 budgetTrackerControllers.controller('ApplicationCtrl', 
   ['$scope', 'USER_ROLES', 'AuthService',
   function ($scope, USER_ROLES, AuthService) {
-    /*$scope.currentUser = null;
+    $scope.currentUser = null;
     $scope.userRoles = USER_ROLES;
     $scope.isAuthorized = AuthService.isAuthorized;
 
     $scope.setCurrentUser = function (user) {
       $scope.currentUser = user;
-    };*/
+    };
 }]);
 
 budgetTrackerControllers.controller('IndexCtrl', 

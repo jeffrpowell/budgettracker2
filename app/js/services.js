@@ -3,6 +3,7 @@
 /* Services */
 
 var budgetTrackerServices = angular.module('budgetTrackerServices', ['ngResource']);
+var firebaseRef = new Firebase("https://budgettracker2.firebaseio.com/");
 
 budgetTrackerServices.factory('Account', ['$resource',
   function($resource){
@@ -32,21 +33,28 @@ budgetTrackerServices.service('Session', function () {
   return this;
 });
 
-budgetTrackerServices.factory('AuthService', ['$http', 'Session',
-function ($http, Session) {
+budgetTrackerServices.factory('AuthService', ['Session',
+function (Session) {
   var authService = {};
  
   authService.login = function (credentials) {
-    return $http
-      .post('/login', credentials)
-      .then(function (res) {
-        Session.create(res.data.id, res.data.user.id,
-                       res.data.user.role);
-        return res.data.user;
-      });
+    firebaseRef.authWithPassword({
+        email : credentials.email,
+        password : credentials.password
+    }, 
+    function(error, authData) {
+        if (error === null) {
+            // user authenticated with Firebase
+            console.log("User ID: " + authData.uid + ", Provider: " + authData.provider);
+            return authData;
+        } else {
+            console.log("Error authenticating user:", error);
+            return {};
+        }
+    });
   };
  
-  authService.isAuthenticated = function () {
+  /*authService.isAuthenticated = function () {
     return !!Session.userId;
   };
  
@@ -56,7 +64,7 @@ function ($http, Session) {
     }
     return (authService.isAuthenticated() &&
       authorizedRoles.indexOf(Session.userRole) !== -1);
-  };
+  };*/
  
   return authService;
 }]);
