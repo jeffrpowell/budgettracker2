@@ -1,6 +1,6 @@
 'use strict';
 
-/* Services and Constants */
+/* Services */
 
 var budgetTrackerServices = angular.module('budgetTrackerServices', ['ngResource']);
 
@@ -32,7 +32,7 @@ budgetTrackerServices.service('Session', function () {
   return this;
 });
 
-budgetTrackerServices.factory('AuthService', ['$http', 'Session'],
+budgetTrackerServices.factory('AuthService', ['$http', 'Session',
 function ($http, Session) {
   var authService = {};
  
@@ -59,20 +59,4 @@ function ($http, Session) {
   };
  
   return authService;
-});
-  
-budgetTrackerServices.constant('AUTH_EVENTS', {
-  loginSuccess: 'auth-login-success',
-  loginFailed: 'auth-login-failed',
-  logoutSuccess: 'auth-logout-success',
-  sessionTimeout: 'auth-session-timeout',
-  notAuthenticated: 'auth-not-authenticated',
-  notAuthorized: 'auth-not-authorized'
-});
-
-budgetTrackerServices.constant('USER_ROLES', {
-  all: '*',
-  admin: 'admin',
-  editor: 'editor',
-  guest: 'guest'
-});
+}]);
