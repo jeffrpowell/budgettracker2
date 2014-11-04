@@ -53,6 +53,14 @@ function (Session) {
         }
     });
   };
+  
+  authService.logout = function(){
+    firebaseRef.unauth();
+  };
+  
+  authService.isAuthenticated = function(){
+    return firebaseRef.getAuth();  
+  };
  
   /*authService.isAuthenticated = function () {
     return !!Session.userId;

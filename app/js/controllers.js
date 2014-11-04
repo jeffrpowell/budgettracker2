@@ -52,10 +52,15 @@ budgetTrackerControllers.controller('ApplicationCtrl',
 }]);
 
 budgetTrackerControllers.controller('IndexCtrl', 
-  ['$scope', 'Account', 'Transaction', 
-  function($scope, Account, Transaction) {
-    /*$scope.phones = Phone.query();
-    $scope.orderProp = 'age';*/
+  ['$scope', 'Account', 'Transaction', 'AuthService',  
+  function($scope, Account, Transaction, AuthService) {
+      if (AuthService.isAuthenticated()){
+      /*$scope.phones = Phone.query();
+        $scope.orderProp = 'age';*/
+      }
+      else{
+          
+      }
   }]);
 
 /*budgetTrackerControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
