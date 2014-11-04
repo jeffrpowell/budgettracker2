@@ -5,7 +5,8 @@ var budgetTrackerApp = angular.module('budgetTrackerApp', [
   'ngRoute',
   'budgetTrackerControllers',
   //'budgetTrackerFilters',
-  'budgetTrackerServices'
+  'budgetTrackerServices',
+  'budgetTrackerDirectives'
 ]);
 
 budgetTrackerApp.config(['$routeProvider',

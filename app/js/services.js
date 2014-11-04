@@ -17,24 +17,7 @@ budgetTrackerServices.factory('Transaction', ['$resource',
     
   }]);
 
-//https://medium.com/opinionated-angularjs/techniques-for-authentication-in-angularjs-applications-7bbf0346acec#13fd
-
-budgetTrackerServices.service('Session', function () {
-  this.create = function (sessionId, userId, userRole) {
-    this.id = sessionId;
-    this.userId = userId;
-    this.userRole = userRole;
-  };
-  this.destroy = function () {
-    this.id = null;
-    this.userId = null;
-    this.userRole = null;
-  };
-  return this;
-});
-
-budgetTrackerServices.factory('AuthService', ['Session',
-function (Session) {
+budgetTrackerServices.factory('AuthService', [function () {
   var authService = {};
  
   authService.login = function (credentials) {
@@ -62,10 +45,7 @@ function (Session) {
     return firebaseRef.getAuth();  
   };
  
-  /*authService.isAuthenticated = function () {
-    return !!Session.userId;
-  };
- 
+ /*
   authService.isAuthorized = function (authorizedRoles) {
     if (!angular.isArray(authorizedRoles)) {
       authorizedRoles = [authorizedRoles];
