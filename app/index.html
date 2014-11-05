@@ -3,50 +3,56 @@
 <!--[if IE 7]>         <html lang="en" ng-app="budgetTrackerApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html lang="en" ng-app="budgetTrackerApp" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html lang="en" ng-app="budgetTrackerApp" class="no-js"> <!--<![endif]-->
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Budget Tracker</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
-  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/app.css">
-  <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
-  <script src="bower_components/jquery/dist/jquery.min.js"></script>
-  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="https://cdn.firebase.com/js/client/1.1.3/firebase.js"></script>
-  <!-- In production use:
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
-  -->
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-resource/angular-resource.js"></script>
-  <script src="js/services.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/directives.js"></script>
-  <script src="js/filters.js"></script>
-  <script src="js/app.js"></script>
-</head>
-<body ng-controller="ApplicationCtrl">
-    <div id="topmenu">
-    
-    <nav class="navbar navbar-default navbar-inverse" role="navigation">
-            <div class="navbar-header">
-                    <a class="navbar-brand" href="{% url 'budget:index' %}">Budget Tracker</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-              <!-- BREADCRUMBS HERE -->
-            </ul>
-            
-      </div><!-- /.navbar-collapse -->
-    </nav>
-    
-    </div>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Budget Tracker</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
+		<link rel="stylesheet" href="bower_components/html5-boilerplate/css/main.css">
+		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/app.css">
+		<script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+		<script src="bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+		<script src="https://cdn.firebase.com/js/client/1.1.3/firebase.js"></script>
+		<!-- In production use:
+		<script src="//ajax.googleapis.com/ajax/libs/angularjs/x.x.x/angular.min.js"></script>
+		-->
+		<script src="bower_components/angular/angular.js"></script>
+		<script src="bower_components/angular-route/angular-route.js"></script>
+		<script src="bower_components/angular-resource/angular-resource.js"></script>
+		<script src="bower_components/angularfire/dist/angularfire.min.js"></script>
+		<script src="bower_components/firebase-simple-login/firebase-simple-login.js"></script>
+		<script src="js/firebase.js"></script>
+		<script src="js/services.js"></script>
+		<script src="js/controllers.js"></script>
+		<script src="js/directives.js"></script>
+		<script src="js/filters.js"></script>
+		<script src="js/app.js"></script>
+	</head>
+	<body ng-controller="ApplicationCtrl">
+		<div id="topmenu">
 
-    <div ng-view my-auth id="content" class="container"></div>
-  
-</body>
+			<nav class="navbar navbar-default navbar-inverse" role="navigation">
+				<div class="navbar-header">
+                    <a class="navbar-brand" href="{% url 'budget:index' %}">Budget Tracker</a>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<!-- BREADCRUMBS HERE -->
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="" ng-click="logout()">Logout</a></li>
+					</ul>
+
+				</div><!-- /.navbar-collapse -->
+			</nav>
+
+		</div>
+
+		<div ng-view my-auth id="content" class="container"></div>
+
+	</body>
 </html>

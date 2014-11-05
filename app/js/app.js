@@ -14,7 +14,15 @@ budgetTrackerApp.config(['$routeProvider',
     $routeProvider
       .when('/', {
         templateUrl: 'partials/home.html',
-        controller: 'IndexCtrl'
+        controller: 'IndexCtrl',
+		resolve: {
+			// controller will not be loaded until $getCurrentUser resolves
+			// simpleLogin refers to our $firebaseSimpleLogin wrapper in the example above
+			"currentUser": ["simpleLogin", function(simpleLogin) {
+			// $getCurrentUser returns a promise so the resolve waits for it to complete
+			return simpleLogin.$getCurrentUser();
+			}]
+		}
       })
       .when('/auth', {
           templateUrl: 'partials/auth.html',

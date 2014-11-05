@@ -49,18 +49,17 @@ budgetTrackerControllers.controller('ApplicationCtrl',
     $scope.setCurrentUser = function (user) {
       $scope.currentUser = user;
     };
+	
+	$scope.logout = function(){
+		$scope.currentUser = null;
+		AuthService.logout();
+	};
 }]);
 
 budgetTrackerControllers.controller('IndexCtrl', 
-  ['$scope', 'Account', 'Transaction', 'AuthService',  
-  function($scope, Account, Transaction, AuthService) {
-      if (AuthService.isAuthenticated()){
-      /*$scope.phones = Phone.query();
-        $scope.orderProp = 'age';*/
-      }
-      else{
-          
-      }
+  ['$scope', 'Account', 'Transaction', 
+  function($scope, Account, Transaction) {
+      
   }]);
 
 /*budgetTrackerControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
@@ -76,12 +75,18 @@ budgetTrackerControllers.controller('IndexCtrl',
 
 budgetTrackerControllers.controller('AccountCtrl', 
   ['$scope', '$routeParams', 'Account', 'Transaction', 
-  function($scope, $routeParams, Account, Transaction) {
-    
+  function($scope, $routeParams, Account) {
+	// put our profile in the scope for use in DOM
+	$scope.account = Account("physicsmarie");
+	// create a 3-way binding to our Profile as $scope.profile
+	Account("physicsmarie").$bindTo($scope, "account");
   }]);
 
 budgetTrackerControllers.controller('TransactionCtrl', 
   ['$scope', '$routeParams', 'Transaction',
   function($scope, $routeParams, Transaction) {
-    
+    // put our profile in the scope for use in DOM
+	$scope.transaction = Transaction("physicsmarie");
+	// create a 3-way binding to our Profile as $scope.profile
+	Transaction("physicsmarie").$bindTo($scope, "transaction");
   }]);
