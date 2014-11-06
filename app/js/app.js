@@ -8,12 +8,10 @@ var budgetTrackerApp = angular.module('budgetTrackerApp', [
 	'budgetTrackerServices',
 	'budgetTrackerDirectives',
 	'myApp.config',
-//	'myApp.controllers',
+	'myApp.afcontrollers',
 	'myApp.decorators',
 	'myApp.directives',
-//	'myApp.filters',
-	'myApp.routes',
-//	'myApp.services'
+	'myApp.routes'
 ])
 
 .run(['simpleLogin', function(simpleLogin) {

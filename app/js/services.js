@@ -6,6 +6,12 @@ var budgetTrackerServices = angular.module('budgetTrackerServices', ['ngResource
 
 budgetTrackerServices.value('FirebaseRefUrl', 'https://budgettracker2.firebaseio.com/');
 
+/*
+ * .factory('messageList', ['fbutil', function(fbutil) {
+       return fbutil.syncArray('messages', {limit: 10, endAt: null});
+     }]);
+ */
+
 budgetTrackerServices.factory('Account', ['$firebase', 'FirebaseRefUrl', 
 	function ($firebase, FirebaseRefUrl) {
 		return function(accountId){
