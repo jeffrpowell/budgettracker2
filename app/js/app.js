@@ -2,12 +2,24 @@
 
 // Declare app level module which depends on views, and components
 var budgetTrackerApp = angular.module('budgetTrackerApp', [
-  'ngRoute',
-  'budgetTrackerControllers',
-  //'budgetTrackerFilters',
-  'budgetTrackerServices',
-  'budgetTrackerDirectives'
-]);
+	'ngRoute',
+	'budgetTrackerControllers',
+	//'budgetTrackerFilters',
+	'budgetTrackerServices',
+	'budgetTrackerDirectives',
+	'myApp.config',
+//	'myApp.controllers',
+	'myApp.decorators',
+	'myApp.directives',
+//	'myApp.filters',
+	'myApp.routes',
+//	'myApp.services'
+])
+
+.run(['simpleLogin', function(simpleLogin) {
+	console.log('run'); //debug
+	simpleLogin.getUser();
+}]);
 
 budgetTrackerApp.config(['$routeProvider',
   function($routeProvider) {

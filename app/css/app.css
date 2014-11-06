@@ -1,5 +1,9 @@
 /* app css stylesheet */
 
+body {
+  margin: 10px;
+}
+
 .menu {
   list-style: none;
   border-bottom: 0.1em solid black;
@@ -19,6 +23,10 @@
   display: inline;
 }
 
+.menu > li.hide {
+   display: none;
+}
+
 .menu > li:before {
   content: "|";
   padding-right: 0.3em;
@@ -27,4 +35,36 @@
 .menu > li:nth-child(1):before {
   content: "";
   padding: 0;
+}
+
+p.status {
+   color: red;
+}
+
+p.status.good, p.good {
+   color: green;
+}
+
+form label {
+   display: block;
+   margin: 15px 0;
+}
+
+form label span {
+   display: block;
+   font-weight: bold;
+}
+
+.error {
+   color: red;
+}
+
+fieldset {
+   float: left;
+   margin-right: 25px;
+   padding: 25px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
 }
