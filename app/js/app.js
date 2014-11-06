@@ -2,13 +2,13 @@
 
 // Declare app level module which depends on views, and components
 angular.module('budgetTracker', [
-	'budgetTracker.controllers',
-	'budgetTracker.filters',
-	'budgetTracker.services',
-	'budgetTracker.directives',
 	'budgetTracker.config',
+	'budgetTracker.controllers',
 	'budgetTracker.decorators',
-	'budgetTracker.routes'
+	'budgetTracker.directives',
+	'budgetTracker.filters',
+	'budgetTracker.routes',
+	'budgetTracker.services'
 ])
 
 .run(['simpleLogin', function(simpleLogin) {
