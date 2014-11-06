@@ -2,9 +2,7 @@
 
 /* Services */
 
-var budgetTrackerServices = angular.module('budgetTrackerServices', ['ngResource', 'firebase']);
-
-budgetTrackerServices.value('FirebaseRefUrl', 'https://budgettracker2.firebaseio.com/');
+var budgetTrackerServices = angular.module('budgetTracker.services', []);
 
 /*
  * .factory('messageList', ['fbutil', function(fbutil) {
@@ -12,34 +10,20 @@ budgetTrackerServices.value('FirebaseRefUrl', 'https://budgettracker2.firebaseio
      }]);
  */
 
-budgetTrackerServices.factory('Account', ['$firebase', 'FirebaseRefUrl', 
-	function ($firebase, FirebaseRefUrl) {
+budgetTrackerServices.factory('Account', ['fbutil', 
+	function (fbutil) {
 		return function(accountId){
 			var ref = new Firebase(FirebaseRefUrl + "account/" + accountId);
 			return $firebase(ref).$asObject();
 		};
 	}]);
 
-budgetTrackerServices.factory('Transaction', ['$firebase', 'FirebaseRefUrl', 
-	function ($firebase, FirebaseRefUrl) {
+budgetTrackerServices.factory('Transaction', ['fbutil', 
+	function (fbutil) {
 		return function(transactionId){
 			var ref = new Firebase(FirebaseRefUrl + "transaction/" + transactionId);
 			return $firebase(ref).$asObject();
 		};
-	}]);
-
-budgetTrackerServices.factory('firebaseService', ['$firebase', '$firebaseSimpleLogin', 'FirebaseRefUrl',
-	function($firebase, $firebaseSimpleLogin, FirebaseRefUrl){
-		var firebaseService = {};
-		firebaseService.ref = new Firebase(FirebaseRefUrl);
-		firebaseService.sync = $firebase(firebaseService.ref);
-		firebaseService.authClient = $firebaseSimpleLogin(firebaseService.ref);
-		return firebaseService;
-	}]);
-
-budgetTrackerServices.factory('simpleLogin', ['$firebaseSimpleLogin', 'FirebaseRefUrl', 
-	function($firebaseSimpleLogin, FirebaseRefUrl){
-		return $firebaseSimpleLogin(new Firebase(FirebaseRefUrl));
 	}]);
 
 budgetTrackerServices.factory('AuthService', ['simpleLogin',

@@ -2,7 +2,7 @@
 
 /* Filters */
 
-angular.module('budgetTrackerFilters', []).filter('checkmark', function () {
+angular.module('budgetTracker.filters', []).filter('checkmark', function () {
 	return function (input) {
 		return input ? '\u2713' : '\u2718';
 	};

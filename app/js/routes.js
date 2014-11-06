@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('myApp.routes', ['ngRoute', 'simpleLogin'])
+angular.module('budgetTracker.routes', ['ngRoute', 'simpleLogin'])
 
   .constant('ROUTES', {
     '/home': {
@@ -15,10 +15,6 @@ angular.module('myApp.routes', ['ngRoute', 'simpleLogin'])
           return simpleLogin.getUser();
         }]
       }
-    },
-    '/chat': {
-      templateUrl: 'partials/chat.html',
-      controller: 'ChatCtrl'
     },
     '/login': {
       templateUrl: 'partials/login.html',
@@ -53,7 +49,7 @@ angular.module('myApp.routes', ['ngRoute', 'simpleLogin'])
         return requireUser();
       }];
       $routeProvider.when(path, route);
-    }
+    };
   }])
 
   // configure views; the authRequired parameter is used for specifying pages
