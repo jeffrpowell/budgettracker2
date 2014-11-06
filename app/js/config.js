@@ -15,7 +15,7 @@ angular.module('budgetTracker.config', [])
 
   // double check that the app has been configured before running it and blowing up space and time
   .run(['FBURL', '$timeout', function(FBURL, $timeout) {
-    if( FBURL.match('https://budgettracker2.firebaseio.com') ) {
+    if( FBURL.match('///budgettracker2.firebaseio.com/') ) {
       angular.element(document.body).html('<h1>Please configure app/js/config.js before running!</h1>');
       $timeout(function() {
         angular.element(document.body).removeClass('hide');

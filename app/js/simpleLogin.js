@@ -40,8 +40,7 @@ angular.module('simpleLogin', ['firebase', 'firebase.utils', 'changeEmail'])
         login: function(email, pass) {
           return auth.$login('password', {
             email: email,
-            password: pass,
-            rememberMe: true
+            password: pass
           });
         },
 

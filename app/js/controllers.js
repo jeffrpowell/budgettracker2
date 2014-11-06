@@ -24,7 +24,7 @@ budgetTrackerControllers.controller('LoginCtrl', ['$scope', 'simpleLogin', '$loc
       if( !$scope.email ) {
         $scope.err = 'Please enter an email address';
       }
-      else if( !$scope.pass || !$scope.confirm ) {
+      else if( !$scope.pass) {
         $scope.err = 'Please enter a password';
       }
       return !$scope.err;
@@ -35,9 +35,12 @@ budgetTrackerControllers.controller('LoginCtrl', ['$scope', 'simpleLogin', '$loc
     }
   }]);
 
-budgetTrackerControllers.controller('ApplicationCtrl', 
-  ['$scope', 'simpleLogin', 'fbutil', 'user', '$location',
-  function ($scope, simpleLogin, fbutil, user, $location) {
+budgetTrackerControllers.controller('HomeCtrl', 
+['$scope', 'simpleLogin', 'fbutil', 'user', 'FBURL', '$location',
+	function($scope, simpleLogin, fbutil, user, FBURL, $location) {
+    $scope.syncedValue = fbutil.syncObject('syncedValue');
+    $scope.user = user;
+    $scope.FBURL = FBURL;
 	// create a 3-way binding with the user profile object in Firebase
 	var profile = fbutil.syncObject(['users', user.uid]);
 	profile.$bindTo($scope, 'profile');
@@ -48,12 +51,6 @@ budgetTrackerControllers.controller('ApplicationCtrl',
 		simpleLogin.logout();
 		$location.path('/login');
 	};
-}]);
-
-budgetTrackerControllers.controller('HomeCtrl', ['$scope', 'fbutil', 'user', 'FBURL', function($scope, fbutil, user, FBURL) {
-    $scope.syncedValue = fbutil.syncObject('syncedValue');
-    $scope.user = user;
-    $scope.FBURL = FBURL;
   }]);
 
 /*budgetTrackerControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
