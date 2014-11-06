@@ -12,6 +12,5 @@ angular.module('budgetTracker', [
 ])
 
 .run(['simpleLogin', function(simpleLogin) {
-	console.log('run'); //debug
 	simpleLogin.getUser();
 }]);

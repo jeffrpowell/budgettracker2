@@ -14,19 +14,15 @@ angular.module('budgetTracker.routes', ['ngRoute', 'simpleLogin'])
         user: ['simpleLogin', function(simpleLogin) {
           return simpleLogin.getUser();
         }]
-      }
+      },
+      // require user to be logged in to view this route
+      // the whenAuthenticated method below will resolve the current user
+      // before this controller loads and redirect if necessary
+	  authRequired: true
     },
     '/login': {
       templateUrl: 'partials/login.html',
       controller: 'LoginCtrl'
-    },
-    '/account': {
-      templateUrl: 'partials/account.html',
-      controller: 'AccountCtrl',
-      // require user to be logged in to view this route
-      // the whenAuthenticated method below will resolve the current user
-      // before this controller loads and redirect if necessary
-      authRequired: true
     }
   })
 
