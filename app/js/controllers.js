@@ -2,64 +2,58 @@
 
 /* Controllers */
 
-var budgetTrackerControllers = angular.module('budgetTracker.controllers', []);
+var budgetTrackerControllers = angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin']);
 
-//https://medium.com/opinionated-angularjs/techniques-for-authentication-in-angularjs-applications-7bbf0346acec
+budgetTrackerControllers.controller('LoginCtrl', ['$scope', 'simpleLogin', '$location', function($scope, simpleLogin, $location) {
+    $scope.email = null;
+    $scope.pass = null;
 
-budgetTrackerControllers.value('AUTH_EVENTS', {
-  loginSuccess: 'auth-login-success',
-  loginFailed: 'auth-login-failed',
-  logoutSuccess: 'auth-logout-success',
-  sessionTimeout: 'auth-session-timeout',
-  notAuthenticated: 'auth-not-authenticated',
-  notAuthorized: 'auth-not-authorized'
-});
+    $scope.login = function(email, pass) {
+      $scope.err = null;
+	  if (assertValidAccountProps()){
+		simpleLogin.login(email, pass)
+		  .then(function(/* user */) {
+			$location.path('/home');
+		  }, function(err) {
+			$scope.err = errMessage(err);
+		  });
+	  }
+    };
 
-budgetTrackerControllers.value('USER_ROLES', {
-  all: '*',
-  admin: 'admin',
-  editor: 'editor',
-  guest: 'guest'
-});
+    function assertValidAccountProps() {
+      if( !$scope.email ) {
+        $scope.err = 'Please enter an email address';
+      }
+      else if( !$scope.pass || !$scope.confirm ) {
+        $scope.err = 'Please enter a password';
+      }
+      return !$scope.err;
+    }
 
-budgetTrackerControllers.controller('LoginCtrl', 
-  ['$scope', '$rootScope', 'AUTH_EVENTS', 'AuthService',
-  function ($scope, $rootScope, AUTH_EVENTS, AuthService) {
-  $scope.credentials = {
-    email: '',
-    password: ''
-  };
-  $scope.login = function (credentials) {
-    AuthService.login(credentials).then(function (user) {
-      $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-      $scope.setCurrentUser(user);
-    }, function () {
-      $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
-    });
-  };
-}]);
+    function errMessage(err) {
+      return angular.isObject(err) && err.code? err.code : err + '';
+    }
+  }]);
 
 budgetTrackerControllers.controller('ApplicationCtrl', 
-  ['$scope', 'USER_ROLES', 'AuthService',
-  function ($scope, USER_ROLES, AuthService) {
-    $scope.currentUser = null;
-    $scope.userRoles = USER_ROLES;
-    $scope.isAuthorized = AuthService.isAuthorized;
+  ['$scope', 'simpleLogin', 'fbutil', 'user', '$location',
+  function ($scope, simpleLogin, fbutil, user, $location) {
+	// create a 3-way binding with the user profile object in Firebase
+	var profile = fbutil.syncObject(['users', user.uid]);
+	profile.$bindTo($scope, 'profile');
 
-    $scope.setCurrentUser = function (user) {
-      $scope.currentUser = user;
-    };
-	
-	$scope.logout = function(){
-		$scope.currentUser = null;
-		AuthService.logout();
+	// expose logout function to scope
+	$scope.logout = function() {
+		profile.$destroy();
+		simpleLogin.logout();
+		$location.path('/login');
 	};
 }]);
 
-budgetTrackerControllers.controller('IndexCtrl', 
-  ['$scope', 'Account', 'Transaction', 
-  function($scope, Account, Transaction) {
-      
+budgetTrackerControllers.controller('HomeCtrl', ['$scope', 'fbutil', 'user', 'FBURL', function($scope, fbutil, user, FBURL) {
+    $scope.syncedValue = fbutil.syncObject('syncedValue');
+    $scope.user = user;
+    $scope.FBURL = FBURL;
   }]);
 
 /*budgetTrackerControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
@@ -72,21 +66,3 @@ budgetTrackerControllers.controller('IndexCtrl',
       $scope.mainImageUrl = imageUrl;
     }
   }]);*/
-
-budgetTrackerControllers.controller('AccountCtrl', 
-  ['$scope', '$routeParams', 'Account', 'Transaction', 
-  function($scope, $routeParams, Account) {
-	// put our profile in the scope for use in DOM
-	$scope.account = Account("physicsmarie");
-	// create a 3-way binding to our Profile as $scope.profile
-	Account("physicsmarie").$bindTo($scope, "account");
-  }]);
-
-budgetTrackerControllers.controller('TransactionCtrl', 
-  ['$scope', '$routeParams', 'Transaction',
-  function($scope, $routeParams, Transaction) {
-    // put our profile in the scope for use in DOM
-	$scope.transaction = Transaction("physicsmarie");
-	// create a 3-way binding to our Profile as $scope.profile
-	Transaction("physicsmarie").$bindTo($scope, "transaction");
-  }]);

@@ -7,7 +7,6 @@ angular.module('budgetTracker', [
 	'budgetTracker.services',
 	'budgetTracker.directives',
 	'budgetTracker.config',
-	'myApp.afcontrollers',
 	'budgetTracker.decorators',
 	'budgetTracker.routes'
 ])

@@ -1,14 +1,13 @@
-<form name="loginForm" ng-controller="LoginCtrl"
-      ng-submit="login(credentials)" novalidate>
+<form>
+    <label>
+        <span>email</span>
+        <input type="text" ng-model="email" />
+    </label>
+    <label>
+        <span>password</span>
+        <input type="password" ng-model="pass" />
+    </label>
+    <button ng-click="login(email, pass)" >Log In</button>
 
-  <label for="email">Email:</label>
-  <input type="text" id="email"
-         ng-model="credentials.email">
-
-  <label for="password">Password:</label>
-  <input type="password" id="password"
-         ng-model="credentials.password">
-
-  <button type="submit">Login</button>
-
+    <p ng-show="err" class="error">{{err}}</p>
 </form>
