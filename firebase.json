@@ -8,5 +8,6 @@
     "**/nbproject/**",
 	".gitignore",
 	"**/.git/**"
-  ]
+  ],
+  "rules": "config/security-rules.json"
 }
