@@ -2,9 +2,9 @@
 
 /* Controllers */
 
-var budgetTrackerControllers = angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin']);
+angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 
-budgetTrackerControllers.controller('LoginCtrl', ['$scope', 'simpleLogin', '$location', function($scope, simpleLogin, $location) {
+.controller('LoginCtrl', ['$scope', 'simpleLogin', '$location', function($scope, simpleLogin, $location) {
     $scope.email = null;
     $scope.pass = null;
 
@@ -33,9 +33,9 @@ budgetTrackerControllers.controller('LoginCtrl', ['$scope', 'simpleLogin', '$loc
     function errMessage(err) {
       return angular.isObject(err) && err.code? err.code : err + '';
     }
-  }]);
+  }])
 
-budgetTrackerControllers.controller('HomeCtrl', 
+.controller('HomeCtrl', 
 ['$scope', 'simpleLogin', 'fbutil', 'user', 'FBURL', '$location',
 	function($scope, simpleLogin, fbutil, user, FBURL, $location) {
     $scope.syncedValue = fbutil.syncObject('syncedValue');
@@ -51,7 +51,25 @@ budgetTrackerControllers.controller('HomeCtrl',
 		simpleLogin.logout();
 		$location.path('/login');
 	};
-  }]);
+  }])
+  
+.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', 
+	function($scope, $routeParams, Category){
+		if ($routeParams.cid){
+			$scope.category = Category.get($routeParams.cid);
+		}
+		else{
+			$scope.category = {
+				'name': '',
+				'income_accounts': false,
+				'goal_accounts': false
+			};
+		}
+		
+		$scope.saveCategory = function(){
+			
+		};
+	}]);
 
 /*budgetTrackerControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
   function($scope, $routeParams, Phone) {

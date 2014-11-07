@@ -23,7 +23,17 @@ angular.module('budgetTracker.routes', ['ngRoute', 'simpleLogin'])
     '/login': {
       templateUrl: 'partials/login.html',
       controller: 'LoginCtrl'
-    }
+    },
+	'/category': {
+		templateUrl: 'partials/account_category.html',
+		controller: 'CategoryDetailCtrl',
+		authRequired: true
+	}/*,
+	'/category/:cid': {
+		templateUrl: 'partials/account_category.html',
+		controller: 'CategoryDetailCtrl',
+		authRequired: true
+	}*/
   })
 
   /**
