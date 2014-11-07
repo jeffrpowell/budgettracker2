@@ -27,7 +27,7 @@
           "category": {".validate": "root.child('account_category/'+$account_category_id).exists()"},
           "goal": {".validate": "newData.isNumber()"},
           "goal_account": {".validate": "newData.isBoolean()"}, //default: true
-          //"parent_account": {"type": "account_id", "nullable": "true", "default": "null"},
+          "parent_account": {".validate": "root.child('account/'+newData.val()).exists()"},
           "$other": { ".validate": false }
         }
       }
@@ -41,8 +41,11 @@
         ".validate": "newData.hasChildren(['date', 'amount', 'projection', 'memo'])",
         // dates in the format YYYY-MM-DD between the years 1900-2099
         "date": {".validate": "newData.isString() && newData.val().matches(/^(19|20)[0-9][0-9][-\\/. ](0[1-9]|1[012])[-\\/. ](0[1-9]|[12][0-9]|3[01])$/)"},
-        //"to_account": {"type": "account_id"},
-        //"from_account": {"type": "account_id"},
+        "accounts": {
+          "from": {".validate": "root.child('account/'+newData.val()).exists()"},
+          "to": {".validate": "root.child('account/'+newData.val()).exists()"},
+          "$other": {".validate": false}
+        },
         "amount": {".validate": "newData.isNumber()"},
         "projection": {".validate": "newData.isBoolean()"},
         "memo": {".validate": "newData.isString()"},
