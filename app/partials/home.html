@@ -93,7 +93,7 @@
 						</tr>
 						<tr><th>Category</th><th class="text-center" colspan="2">Projected</th><th class="text-center" colspan="2">Actual</th><th class="text-center">Difference</th><th>Actions</th></tr>
 						<tr ng-repeat-start="cat in categories.income"><td colspan="6"><h4><a href="#/category/income/{{cat.$id}}">{{cat.name}}</a></h4></td>
-							<td><a href="#">Add Account</a></td>
+							<td><a href="#/account?cid={{cat.$id}}&category={{cat.name}}">Add Account</a></td>
 						</tr>
 						<!--{% for acct in category.accounts %}-->
 						<tr ng-repeat="acct in cat.accounts">
@@ -130,11 +130,11 @@
 						</tr>
 						<tr><th>Category</th><th class="text-center" colspan="2">Projected</th><th class="text-center" colspan="2">Actual</th><th class="text-center">Difference</th><th>Actions</th></tr>
 						<tr ng-repeat-start="cat in categories.expense"><td colspan="6"><h4><a href="#/category/expense/{{cat.$id}}">{{cat.name}}</a></h4></td>
-							<td><a href="#">Add Account</a></td>
+							<td><a href="#/account?cid={{cat.$id}}&category={{cat.name}}">Add Account</a></td>
 						</tr>
 						<!--{% for acct in category.accounts %}-->
 						<tr ng-repeat="acct in cat.accounts">
-							<td><!--<a href="{% if month_persist %}{% url 'budget:account' acct.acct.id month year%}{% else %}{% url 'budget:account' acct.acct.id %}{% endif %}">{{ acct.acct.name }}</a>--></td>
+							<td><!--<a href="{% if month_persist %}{% url 'budget:account' acct.acct.id month year%}{% else %}{% url 'budget:account' acct.acct.id %}{% endif %}">-->{{acct}}<!--</a>--></td>
 							<td id="proj_{{acct.acct.id}}" class="no-right-border"><!--${{ acct.pred }}--></td>
 							<!--<td id="proj_text_{{acct.acct.id}}" class="change-projection-text no-right-border">
 								$<input type="number" step="0.01" id="proj_input_{{ acct.acct.id }}" size="5"></td>-->

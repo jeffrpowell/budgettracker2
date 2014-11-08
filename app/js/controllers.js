@@ -36,23 +36,32 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
   }])
 
 .controller('HomeCtrl', 
-['$scope', 'IncomeCategory', 'ExpenseCategory', 
-	function($scope, IncomeCategory, ExpenseCategory) {
+['$scope', 'Category', 'Account', 
+	function($scope, Category, Account) {
 		$scope.categories = {};
-		IncomeCategory.$loaded().then(function(cats){
-			$scope.categories.income = cats;
+		Category.income.$inst().$ref().once("value", function(snap){
+			$scope.categories.income = snap.val();
+			snap.forEach(function(childSnap){
+				if (childSnap.hasChild('accounts')){
+					childSnap.child("accounts").forEach(function(acctSnap){
+						Account.query(acctSnap.key()).$loaded().then(function(loadedAcct){
+							$scope.categories.income[childSnap.key()]["accounts"][acctSnap.key()] = loadedAcct;
+						});
+					});
+				}
+			});
 		});
-		ExpenseCategory.$loaded().then(function(cats){
+		Category.expense.$loaded().then(function(cats){
 			$scope.categories.expense = cats;
 		});
 	}])
   
-.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'IncomeCategory', 'ExpenseCategory', '$location', 
-	function($scope, $routeParams, IncomeCategory, ExpenseCategory, $location){
-		var setupCategory = function(list){
-			$scope.category = list.$getRecord($routeParams.cid);
+.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', '$location', 
+	function($scope, $routeParams, Category, $location){
+		var setupCategory = function(cat){
+			$scope.category = cat;//list.$getRecord($routeParams.cid);
 
-			if ($scope.category === null){
+			if ($scope.category.$id === "undefined"){
 				$scope.category = {
 					'name': ''
 				};
@@ -63,20 +72,18 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 				$scope.title = "Edit " + $scope.category.name + " ";
 				$scope.add_mode = false;
 			}
+			$scope.category.type = $routeParams.type;
 		};
 		
-		if ($routeParams.cid === null && ($routeParams.type === "income" || $routeParams.type === "expense")){
+		if ($routeParams.cid === null && ($routeParams.type === "income" || $routeParams.type === "expense" || $routeParams.type === "bank")){
 			$scope.category = {
 				'name': ''
 			};
 			$scope.title = "Add New ";
 			$scope.add_mode = true;
 		}
-		else if ($routeParams.type === "income"){
-			IncomeCategory.$loaded().then(setupCategory);
-		}
-		else if ($routeParams.type === "expense"){
-			ExpenseCategory.$loaded().then(setupCategory);
+		else if ($routeParams.type === "income" || $routeParams.type === "expense" || $routeParams.type === "bank"){
+			Category.customObj($routeParams.cid).$loaded().then(setupCategory);
 		}
 		else{
 			$location.path('home');
@@ -86,33 +93,42 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 			if ($scope.category){
 				//TODO: validation framework
 				if ($scope.add_mode){
-					if ($routeParams.type === "income"){
-						IncomeCategory.$add($scope.category);
-					}
-					else{
-						ExpenseCategory.$add($scope.category);
-					}
+					Category.all.$add($scope.category);
 				}
 				else{
-					if ($routeParams.type === "income"){
-						IncomeCategory.$save($scope.category);
-					}
-					else{
-						ExpenseCategory.$save($scope.category);
-					}
+					$scope.category.$save();
 				}
 				$location.path('home');
 			}
 		};
+	}])
+
+.controller('AddAccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 
+	function($scope, $routeParams, Account, Category, $location){
+		//$routeParams.aid != null -> adding sub-account
+		if (!$routeParams.cid){
+			$location.path('home');
+		}
+		else{
+			$scope.category = {
+				"$id": $routeParams.cid,
+				"name": $routeParams.category
+			};
+			$scope.account = {
+				"name": '',
+				"balance": 0.00,
+				"category": $routeParams.cid,
+				"goal_account": false
+			};
+			$scope.saveAccount = function(){
+			if ($scope.account){
+				//TODO: validation framework
+				Account.all.$add($scope.account).then(function(ref){
+					var accts = Category.customObj($routeParams.cid+"/accounts").$inst();
+					accts.$set(ref.name(), ref.name());
+					$location.path('home');
+				});
+			}
+		};
+		}
 	}]);
-
-/*budgetTrackerControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
-  function($scope, $routeParams, Phone) {
-    $scope.phone = Phone.get({phoneId: $routeParams.phoneId}, function(phone) {
-      $scope.mainImageUrl = phone.images[0];
-    });
-
-    $scope.setImage = function(imageUrl) {
-      $scope.mainImageUrl = imageUrl;
-    }
-  }]);*/

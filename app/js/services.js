@@ -4,6 +4,21 @@
 
 angular.module('budgetTracker.services', [])
 
+.factory('Category', ['fbutil', function(fbutil){
+	return {
+		"customArr": function(path){
+			return fbutil.syncArray('account_category/'+path, {});
+		},
+		"customObj": function(path){
+			return fbutil.syncObject('account_category/'+path, {});
+		},
+		"all": fbutil.syncArray('account_category', {}),
+		"bank": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').startAt('bank').endAt('bank')).$asArray(),
+		"income": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').startAt('income').endAt('income')).$asArray(),
+		"expense": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').startAt('expense').endAt('expense')).$asArray()
+	};
+}])
+
 .factory('BankCategory', ['fbutil', function(fbutil){
 	return fbutil.syncArray('account_category/bank', {});
 }])
@@ -14,6 +29,15 @@ angular.module('budgetTracker.services', [])
 
 .factory('ExpenseCategory', ['fbutil', function(fbutil){
 	return fbutil.syncArray('account_category/expense', {});
+}])
+
+.factory('Account', ['fbutil', function(fbutil){
+	return {
+		"all": fbutil.syncArray('account', {}),
+		"query": function(aid){
+			return fbutil.syncObject('account/'+aid, {});
+		}
+	};
 }]);
 /*
  * .factory('messageList', ['fbutil', function(fbutil) {

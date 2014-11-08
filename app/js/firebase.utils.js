@@ -12,7 +12,12 @@ angular.module('firebase.utils', ['firebase', 'budgetTracker.config'])
         syncArray: function(path, factoryConfig) {
           return syncData.apply(null, arguments).$asArray();
         },
-
+		angularFireRef: function(path, factoryConfig) {
+			return syncData.apply(null, arguments);
+		},
+		angularFireFromRef: function(ref){
+			return $firebase(ref);
+		},
         ref: firebaseRef
       };
 

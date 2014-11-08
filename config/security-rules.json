@@ -3,51 +3,32 @@
     ".read": false,
     ".write": false,
     "account_category": {
-      "bank": {
-        ".read": "auth.id !== null",
-        ".write": "auth.id !== null",
-        "$account_category_id": {
-          ".validate": "!data.exists() && newData.hasChildren(['name'])",
-          "name": {".validate": "newData.isString() && newData.val().length > 0"},
-          "accounts": {".validate": "root.child('account/' + newData.val()).exists()"},
-          "$other": { ".validate": false }
-        }
-      },
-      "expense": {
-        ".read": "auth.id !== null",
-        ".write": "auth.id !== null",
-        "$account_category_id": {
-          ".validate": "newData.hasChildren(['name'])",
-          "name": {".validate": "newData.isString() && newData.val().length > 0"},
-          "accounts": {".validate": "root.child('account/' + newData.val()).exists()"},
-          "$other": { ".validate": false }
-        } 
-      },
-      "income": {
-        ".read": "auth.id !== null",
-        ".write": "auth.id !== null",
-        "$account_category_id": {
-          ".validate": "newData.hasChildren(['name'])",
-          "name": {".validate": "newData.isString() && newData.val().length > 0"},
-          "accounts": {".validate": "root.child('account/' + newData.val()).exists()"},
-          "$other": { ".validate": false }
-        }
+      ".read": "auth.id !== null",
+      ".write": "auth.id !== null",
+      "$account_category_id": {
+        ".validate": "newData.hasChildren()",
+        "name": {".validate": "newData.isString() && newData.val().length > 0"},
+        "accounts": {
+          "$account_id": {".validate": "newData.isString()"}
+        },
+        "type": {".validate": "newData.val() == 'expense' || newData.val() == 'income' || newData.val() == 'bank'"},
+        "$other": { ".validate": false }
       }
     },
     "account": {
       ".read": "auth.id !== null",
       ".write": "auth.id !== null",
-      "$account_category_id":{
-        ".validate": "root.child('account_category/expense' + $account_category_id).exists() || root.child('account_category/income' + $account_category_id).exists() || root.child('account_category/bank' + $account_category_id).exists()",
-        "$account_id": {
-          ".validate": "newData.hasChildren(['name', 'balance', 'category', 'goal_account'])",
-          "name": {".validate": "newData.isString() && newData.val().length > 0"},
-          "balance": {".validate": "newData.isNumber()"},
-          "goal": {".validate": "newData.isNumber()"},
-          "goal_account": {".validate": "newData.isBoolean()"},
-          "parent_account": {".validate": "root.child('account/'+newData.val()).exists()"},
-          "$other": { ".validate": false }
-        }
+      "$account_id": {
+        ".validate": "newData.hasChildren(['name', 'balance', 'category', 'goal_account'])",
+        "category":{
+          ".validate": "root.child('account_category/expense/'+newData.val()).exists() || root.child('account_category/income/'+newData.val()).exists() || root.child('account_category/bank/'+newData.val()).exists()"
+        },
+        "name": {".validate": "newData.isString() && newData.val().length > 0"},
+        "balance": {".validate": "newData.isNumber()"},
+        "goal": {".validate": "newData.isNumber()"},
+        "goal_account": {".validate": "newData.isBoolean()"},
+        "parent_account": {".validate": "root.child('account/'+newData.val()).exists()"},
+        "$other": { ".validate": false }
       }
     },
     "transaction": {
