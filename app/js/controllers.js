@@ -36,9 +36,15 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
   }])
 
 .controller('HomeCtrl', 
-['$scope', 'IncomeCategory',
-	function($scope, IncomeCategory) {
-		$scope.two = 2;
+['$scope', 'IncomeCategory', 'ExpenseCategory', 
+	function($scope, IncomeCategory, ExpenseCategory) {
+		$scope.categories = {};
+		IncomeCategory.$loaded().then(function(cats){
+			$scope.categories.income = cats;
+		});
+		ExpenseCategory.$loaded().then(function(cats){
+			$scope.categories.expense = cats;
+		});
 	}])
   
 .controller('CategoryDetailCtrl',['$scope', '$routeParams', 'IncomeCategory', 'ExpenseCategory', '$location', 
