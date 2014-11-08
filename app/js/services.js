@@ -5,12 +5,7 @@
 angular.module('budgetTracker.services', [])
 
 .factory('Category', ['fbutil', function(fbutil){
-	var list = {};
-	list.list = fbutil.syncArray('account_category', {});
-	list.get = function(category_id){
-		return list.list.child(category_id);
-	};
-	return list;
+	return fbutil.syncArray('account_category', {});
 }]);
 
 /*

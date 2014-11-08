@@ -36,38 +36,39 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
   }])
 
 .controller('HomeCtrl', 
-['$scope', 'simpleLogin', 'fbutil', 'user', 'FBURL', '$location',
-	function($scope, simpleLogin, fbutil, user, FBURL, $location) {
-    $scope.syncedValue = fbutil.syncObject('syncedValue');
-    $scope.user = user;
-    $scope.FBURL = FBURL;
-	// create a 3-way binding with the user profile object in Firebase
-	var profile = fbutil.syncObject(['users', user.uid]);
-	profile.$bindTo($scope, 'profile');
-
-	// expose logout function to scope
-	$scope.logout = function() {
-		profile.$destroy();
-		simpleLogin.logout();
-		$location.path('/login');
-	};
+['$scope',
+	function($scope) {
+    
   }])
   
-.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', 
-	function($scope, $routeParams, Category){
-		if ($routeParams.cid){
-			$scope.category = Category.get($routeParams.cid);
-		}
-		else{
+.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', '$location', 
+	function($scope, $routeParams, Category, $location){
+		$scope.category = Category.$getRecord($routeParams.cid);
+		if ($scope.category === null){
 			$scope.category = {
 				'name': '',
-				'income_accounts': false,
-				'goal_accounts': false
+				'bank_accounts': false,
+				'income_accounts': ($routeParams.income && $routeParams.income == "income")
 			};
+			$scope.title = "Add New ";
+			$scope.add_mode = true;
+		}
+		else{
+			$scope.title = "Edit " + $scope.category.name + " ";
+			$scope.add_mode = false;
 		}
 		
 		$scope.saveCategory = function(){
-			
+			if ($scope.category){
+				//TODO: validation framework
+				if ($scope.add_mode){
+					Category.$add($scope.category);
+				}
+				else{
+					Category.$save($scope.category);
+				}
+				$location.path('home');
+			}
 		};
 	}]);
 

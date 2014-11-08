@@ -2,16 +2,16 @@
   "rules": {
     ".read": false,
     ".write": false,
-    "account_category":
-    {
+    "account_category": {
+      ".indexOn": ["bank_accounts", "income_accounts"],
       ".read": "auth.id !== null",
       ".write": "auth.id !== null",
-      "$account_category_id":
-      {
-        ".validate": "newData.hasChildren(['name', 'goal_accounts'])",
+      "$account_category_id": {
+        ".validate": "newData.hasChildren(['name', 'bank_accounts', 'income_accounts'])",
         "name": {".validate": "newData.isString() && newData.val().length > 0"},
-        "income_accounts": {".validate": "newData.isBoolean()"}, //nullable
-        "goal_accounts": {".validate": "newData.isBoolean()"},
+        "bank_accounts": {".validate": "newData.isBoolean()"},
+        "income_accounts": {".validate": "newData.isBoolean()"},
+		"accounts": {".validate": "root.child('account/' + newData.val()).exists()"},
         "$other": { ".validate": false }
       }
     },
@@ -26,18 +26,16 @@
           "balance": {".validate": "newData.isNumber()"},
           "category": {".validate": "root.child('account_category/'+$account_category_id).exists()"},
           "goal": {".validate": "newData.isNumber()"},
-          "goal_account": {".validate": "newData.isBoolean()"}, //default: true
+          "goal_account": {".validate": "newData.isBoolean()"},
           "parent_account": {".validate": "root.child('account/'+newData.val()).exists()"},
           "$other": { ".validate": false }
         }
       }
     },
-    "transaction":
-    {
+    "transaction": {
       ".read": "auth.id !== null",
       ".write": "auth.id !== null",
-      "$transaction_id":
-      {
+      "$transaction_id": {
         ".validate": "newData.hasChildren(['date', 'amount', 'projection', 'memo'])",
         // dates in the format YYYY-MM-DD between the years 1900-2099
         "date": {".validate": "newData.isString() && newData.val().matches(/^(19|20)[0-9][0-9][-\\/. ](0[1-9]|1[012])[-\\/. ](0[1-9]|[12][0-9]|3[01])$/)"},
@@ -50,39 +48,6 @@
         "projection": {".validate": "newData.isBoolean()"},
         "memo": {".validate": "newData.isString()"},
         "$other": { ".validate": false }
-      }
-    },
-    "syncedValue": {
-      ".read": true,
-      ".write": true,
-      ".validate": "newData.isString() && newData.val().length <= 100"
-    },
-    "messages": {
-      ".read": true,
-      "$message": {
-        ".write": true,
-        ".validate": "newData.hasChildren(['text'])",
-        "text": {
-          ".validate": "newData.isString() && newData.val().length <= 1000"
-        },
-        "$other": {
-          ".validate": false
-        }
-      }
-    },
-    "users": {
-      "$user": {
-        ".read": "auth.uid === $user",
-        ".write": "auth.uid === $user && (!newData.exists() || newData.hasChildren())",
-        "name": {
-          ".validate": "newData.isString() && newData.val().length <= 2000"
-        },
-        "email": {
-          ".validate": "newData.isString() && newData.val().length <= 2000"
-        },
-        "$other": {
-          ".validate": false
-        }
       }
     }
   }
