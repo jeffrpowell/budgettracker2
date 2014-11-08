@@ -36,36 +36,64 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
   }])
 
 .controller('HomeCtrl', 
-['$scope',
-	function($scope) {
-    
-  }])
+['$scope', 'IncomeCategory',
+	function($scope, IncomeCategory) {
+		$scope.two = 2;
+	}])
   
-.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', '$location', 
-	function($scope, $routeParams, Category, $location){
-		$scope.category = Category.$getRecord($routeParams.cid);
-		if ($scope.category === null){
+.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'IncomeCategory', 'ExpenseCategory', '$location', 
+	function($scope, $routeParams, IncomeCategory, ExpenseCategory, $location){
+		var setupCategory = function(list){
+			$scope.category = list.$getRecord($routeParams.cid);
+
+			if ($scope.category === null){
+				$scope.category = {
+					'name': ''
+				};
+				$scope.title = "Add New ";
+				$scope.add_mode = true;
+			}
+			else{
+				$scope.title = "Edit " + $scope.category.name + " ";
+				$scope.add_mode = false;
+			}
+		};
+		
+		if ($routeParams.cid === null && ($routeParams.type === "income" || $routeParams.type === "expense")){
 			$scope.category = {
-				'name': '',
-				'bank_accounts': false,
-				'income_accounts': ($routeParams.income && $routeParams.income == "income")
+				'name': ''
 			};
 			$scope.title = "Add New ";
 			$scope.add_mode = true;
 		}
+		else if ($routeParams.type === "income"){
+			IncomeCategory.$loaded().then(setupCategory);
+		}
+		else if ($routeParams.type === "expense"){
+			ExpenseCategory.$loaded().then(setupCategory);
+		}
 		else{
-			$scope.title = "Edit " + $scope.category.name + " ";
-			$scope.add_mode = false;
+			$location.path('home');
 		}
 		
 		$scope.saveCategory = function(){
 			if ($scope.category){
 				//TODO: validation framework
 				if ($scope.add_mode){
-					Category.$add($scope.category);
+					if ($routeParams.type === "income"){
+						IncomeCategory.$add($scope.category);
+					}
+					else{
+						ExpenseCategory.$add($scope.category);
+					}
 				}
 				else{
-					Category.$save($scope.category);
+					if ($routeParams.type === "income"){
+						IncomeCategory.$save($scope.category);
+					}
+					else{
+						ExpenseCategory.$save($scope.category);
+					}
 				}
 				$location.path('home');
 			}
