@@ -66,3 +66,37 @@ angular.module('budgetTracker.directives', ['simpleLogin'])
       }
     };
   }]);
+  
+  /*.directive('ngCategorysummary', ['Category', function(Category){
+	return {
+		restrict: 'A', //<tr ng-accountsummary>
+		require: '^ngModel',
+		scope: {
+			ngCategory: '=' //ng-category="$id"
+		},
+		templateUrl: 'partials/ng-categorysummary-template.html',
+		replace: true,
+		link: function(scope, iElement, iAttrs) {
+			Category.query(iAttrs.ngCategory).$loaded(function(loadedAcct){
+				scope.acct = loadedAcct;
+			});
+		}
+	};
+  }])
+  
+  .directive('ngAccountsummary', ['Account', function(Account){
+	return {
+		restrict: 'A', //<tr ng-accountsummary>
+		require: '^ngModel',
+		scope: {
+			ngAccount: '@' //ng-account="$id"
+		},
+		templateUrl: 'partials/ng-accountsummary-template.html',
+		replace: true,
+		link: function(scope, iElement, iAttrs) {
+			Account.query(iAttrs.ngAccount).$loaded(function(loadedAcct){
+				scope.acct = loadedAcct;
+			});
+		}
+	};
+  }]);*/

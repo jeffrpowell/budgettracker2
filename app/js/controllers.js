@@ -42,19 +42,32 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 		Category.income.$loaded(function(incomes){
 			$scope.categories.income = incomes;
 			for (var cat in incomes) {
-				if (incomes.hasOwnProperty(cat) && incomes.cat.accounts){
-					for (var acct in incomes.cat.accounts){
-						if (incomes.cat.accounts.hasOwnProperty(acct)){
-							Account.query(acct).$loaded().then(function(loadedAcct){
+				if (incomes.hasOwnProperty(cat) && incomes[cat].accounts){
+					for (var acct in incomes[cat].accounts){
+						if (incomes[cat].accounts.hasOwnProperty(acct)){
+							/*Account.query(acct).$loaded().then(function(loadedAcct){
 								$scope.categories.income.cat.accounts.acct = loadedAcct;
-							});
+							});*/
+							$scope.categories.income[cat].accounts[acct] = Account.query(acct);
 						}
 					}
 				}
 			}
 		});
-		Category.expense.$loaded().then(function(cats){
-			$scope.categories.expense = cats;
+		Category.expense.$loaded(function(expenses){
+			$scope.categories.expense = expenses;
+			for (var cat in expenses) {
+				if (expenses.hasOwnProperty(cat) && expenses[cat].accounts){
+					for (var acct in expenses[cat].accounts){
+						if (expenses[cat].accounts.hasOwnProperty(acct)){
+							/*Account.query(acct).$loaded().then(function(loadedAcct){
+								$scope.categories.income.cat.accounts.acct = loadedAcct;
+							});*/
+							$scope.categories.expense[cat].accounts[acct] = Account.query(acct);
+						}
+					}
+				}
+			}
 		});
 	}])
   
