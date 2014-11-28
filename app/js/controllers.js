@@ -39,17 +39,19 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 ['$scope', 'Category', 'Account', 
 	function($scope, Category, Account) {
 		$scope.categories = {};
-		Category.income.$inst().$ref().once("value", function(snap){
-			$scope.categories.income = snap.val();
-			snap.forEach(function(childSnap){
-				if (childSnap.hasChild('accounts')){
-					childSnap.child("accounts").forEach(function(acctSnap){
-						Account.query(acctSnap.key()).$loaded().then(function(loadedAcct){
-							$scope.categories.income[childSnap.key()]["accounts"][acctSnap.key()] = loadedAcct;
-						});
-					});
+		Category.income.$loaded(function(incomes){
+			$scope.categories.income = incomes;
+			for (var cat in incomes) {
+				if (incomes.hasOwnProperty(cat) && incomes.cat.accounts){
+					for (var acct in incomes.cat.accounts){
+						if (incomes.cat.accounts.hasOwnProperty(acct)){
+							Account.query(acct).$loaded().then(function(loadedAcct){
+								$scope.categories.income.cat.accounts.acct = loadedAcct;
+							});
+						}
+					}
 				}
-			});
+			}
 		});
 		Category.expense.$loaded().then(function(cats){
 			$scope.categories.expense = cats;
