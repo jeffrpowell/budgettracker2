@@ -19,9 +19,9 @@
       ".read": "auth.id !== null",
       ".write": "auth.id !== null",
       "$account_id": {
-        ".validate": "newData.hasChildren(['name', 'balance', 'category', 'goal_account'])",
+		".validate": "newData.hasChildren(['name', 'balance', 'category', 'goal_account'])",
         "category":{
-          ".validate": "root.child('account_category/expense/'+newData.val()).exists() || root.child('account_category/income/'+newData.val()).exists() || root.child('account_category/bank/'+newData.val()).exists()"
+          ".validate": "root.child('account_category/'+newData.val()).exists()"
         },
         "name": {".validate": "newData.isString() && newData.val().length > 0"},
         "balance": {".validate": "newData.isNumber()"},
