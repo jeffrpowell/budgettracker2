@@ -173,8 +173,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 			if ($scope.account){
 				//TODO: validation framework
 				Account.all.$add($scope.account).then(function(ref){
-					var accts = Category.customObj($routeParams.cid+"/accounts").$inst();
-					accts.$set(ref.name(), ref.name());
+					Category.addAcct($routeParams.cid, ref.name());
 					$location.path('home');
 				});
 			}
@@ -184,7 +183,18 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 
 .controller('EditAccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 
 	function($scope, $routeParams, Account, Category, $location){
-		
+		$scope.account = Account.query($routeParams.aid);
+		Category.all.$loaded(function(cats){
+			$scope.categories = cats;
+			//$scope.originalCategory = cats.$indexFor($scope.account.category);
+			$scope.originalCategory = $scope.account.category;
+		});
+		Account.query($routeParams.aid).$bindTo($scope, 'account');
+		$scope.changeCategory = function(){
+			Category.removeAcct($scope.originalCategory, $scope.account.$id);
+			Category.addAcct($scope.account.category, $scope.account.$id);
+			$scope.originalCategory = $scope.account.category;
+		};
 	}])
 
 .controller('AccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 

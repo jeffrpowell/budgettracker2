@@ -6,43 +6,38 @@
 <div class="row">
 	<div class="col-xs-12">
 		<h2>Edit {{account.name}} Account</h2>
+		<small>All changes are automatically saved.</small>
 		<br /><br />
 	</div>
 </div>
 <div class="row">
 	<div class="col-xs-3">
-
-		<form role="form" method="post">
-
-			<div class="form-group">
-				<label for="id_name">Name:</label>
-				<input type="text" name="name" maxlength="200" id="id_name" class="form-control" value="{{account.name}}">
-			</div>
-			<div class="form-group">
-				<label for="id_category">Category:</label>
-				{{form.category}}
-			</div>
-			<div class="form-group">
-				<label for="id_parent_account">Make this account a subset of </label>
-				{{form.parent_account}}
-			</div>
-			<div class="form-group">
-				<label for="id_balance">Current Balance ($):</label>
-				<input id="id_balance" type="number" step="0.01" name="balance" class="form-control" value="{{account.balance}}">
-			</div>
-			<div class="checkbox">
-				<label> 
-					{{form.goal_account}} Will this be a goal account?
-				</label>
-			</div>
-			<div class="form-group">
-				<label for="id_goal">End Goal ($):</label> 
-				<input type="number" step="0.01" name="goal" id="id_goal" class="form-control" value="{{account.goal}}">
-			</div>
-			<div class="form-group">
-				<input type="submit" class="btn btn-primary" value="Save" />
-			</div>
-		</form>
+		<div class="form-group">
+			<label for="id_name">Name:</label>
+			<input type="text" name="name" maxlength="200" id="id_name" class="form-control" ng-model="account.name" />
+		</div>
+		<div class="form-group">
+			<label for="id_category">Category:</label>
+			<select id="id_category" ng-model="account.category" ng-change="changeCategory()" ng-options="cat.$id as cat.name group by cat.type for cat in categories" class="form-control"></select>
+		</div>
+		<div class="form-group">
+			<label for="id_parent_account">Make this account a subset of </label>
+			<select id="id_parent_account" ng-model="account.parent_account" class="form-control"></select>
+		</div>
+		<div class="form-group">
+			<label for="id_balance">Current Balance ($):</label>
+			<input id="id_balance" type="number" step="0.01" name="balance" class="form-control" ng-model="account.balance" />
+		</div>
+		<div class="checkbox">
+			<label> 
+				<input type="checkbox" name="goal_account" id="id_goal_account" ng-model="account.goal_account"> Will this be a goal account?
+			</label>
+		</div>
+		<div class="form-group">
+			<label for="id_goal">End Goal ($):</label> 
+			<input type="number" step="0.01" name="goal" id="id_goal" class="form-control" ng-model="account.goal">
+		</div>
+		<a class="btn btn-primary" href="#/home">Go Back</a><br><br>
 	</div>
 </div>
 	<!--<script type="text/javascript">

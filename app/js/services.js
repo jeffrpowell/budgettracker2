@@ -12,6 +12,14 @@ angular.module('budgetTracker.services', [])
 		"customObj": function(path){
 			return fbutil.syncObject('account_category/'+path, {});
 		},
+		"addAcct": function(cid, aid){
+			var arr = fbutil.angularFireRef('account_category/'+cid+'/accounts', {});
+			arr.$set(aid, aid);
+		},
+		"removeAcct": function(cid, aid){
+			var accts = fbutil.angularFireRef('account_category/'+cid+'/accounts', {});
+			accts.$remove(aid);
+		},
 		"all": fbutil.syncArray('account_category', {}),
 		"bank": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').startAt('bank').endAt('bank')).$asArray(),
 		"income": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').startAt('income').endAt('income')).$asArray(),
