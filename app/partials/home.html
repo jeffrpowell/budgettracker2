@@ -17,7 +17,8 @@
                 <tr><td><a href="{% if month_persist %}{% url 'budget:account' acct.id month year %}{% else %}{% url 'budget:account' acct.id %}{% endif %}">{{ acct.name }}</a></td><td class="text-right">${{ acct.balance }}</td></tr>
                 {% endif %}
                 {% endfor %}-->
-                <tr><td colspan="2" class="text-right"><a href="/budget/banktransaction/">Transfer Funds</a></td></tr>
+                <tr><td colspan="2" class="text-right"><a href="#/account/add">Add New Account</a> / 
+						<a href="#">Transfer Funds</a></td></tr>
             </table>
         </div>
     </div>
@@ -93,7 +94,7 @@
 						</tr>
 						<tr><th>Category</th><th class="text-center" colspan="2">Projected</th><th class="text-center" colspan="2">Actual</th><th class="text-center">Difference</th><th>Actions</th></tr>
 						<tr ng-repeat-start="cat in categories.income"><td colspan="6"><h4><a href="#/category/income/{{cat.$id}}">{{cat.name}}</a></h4></td>
-							<td><a href="#/account?cid={{cat.$id}}&category={{cat.name}}">Add Account</a></td>
+							<td><a href="#/account/add?cid={{cat.$id}}">Add Account</a></td>
 						</tr>
 						<!--{% for acct in category.accounts %}-->
 						<tr ng-repeat="acct in cat.accounts">
@@ -105,8 +106,8 @@
 							<td class="no-right-border"><!--${{ acct.act }}--></td>
 							<td class="no-left-border text-right"><!--<a href="{% url 'budget:addtransaction' acct.acct.id %}">Add</a>--></td>
 							<td id="diff_{{acct.$id}}"><!--${{ acct.diff }}--></td>
-							<td><!--<a href="{% url 'budget:editaccount' acct.acct.id %}" class="account-edit-link">Edit Account</a> / 
-								<a href="{% url 'budget:deleteaccount' acct.acct.id %}" class="account-delete-link">Delete Account</a>--></td>
+							<td><a href="#/account/{{acct.$id}}/edit" class="account-edit-link">Edit Account</a> / 
+								<a href="#/account/{{acct.$id}}/delete" class="account-delete-link">Delete Account</a></td>
 						</tr>
 						<tr ng-repeat-end><td colspan="7"></td></tr>
 					</table>
@@ -130,7 +131,7 @@
 						</tr>
 						<tr><th>Category</th><th class="text-center" colspan="2">Projected</th><th class="text-center" colspan="2">Actual</th><th class="text-center">Difference</th><th>Actions</th></tr>
 						<tr ng-repeat-start="cat in categories.expense"><td colspan="6"><h4><a href="#/category/expense/{{cat.$id}}">{{cat.name}}</a></h4></td>
-							<td><a href="#/account?cid={{cat.$id}}&category={{cat.name}}">Add Account</a></td>
+							<td><a href="#/account/add?cid={{cat.$id}}">Add Account</a></td>
 						</tr>
 						<!--{% for acct in category.accounts %}-->
 						<tr ng-repeat="acct in cat.accounts">
@@ -142,8 +143,8 @@
 							<td class="no-right-border"><!--${{ acct.act }}--></td>
 							<td class="no-left-border text-right"><!--<a href="{% url 'budget:addtransaction' acct.acct.id %}">Add</a>--></td>
 							<td id="diff_{{acct.$id}}"><!--${{ acct.diff }}--></td>
-							<td><!--<a href="{% url 'budget:editaccount' acct.acct.id %}" class="account-edit-link">Edit Account</a> / 
-								<a href="{% url 'budget:deleteaccount' acct.acct.id %}" class="account-delete-link">Delete Account</a>--></td>
+							<td><a href="#/account/{{acct.$id}}/edit" class="account-edit-link">Edit Account</a> / 
+								<a href="#/account/{{acct.$id}}/delete" class="account-delete-link">Delete Account</a></td>
 						</tr>
 						<tr ng-repeat-end><td colspan="7"></td></tr>
 					</table>

@@ -125,10 +125,13 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 			$location.path('home');
 		}
 		else{
-			$scope.category = {
-				"$id": $routeParams.cid,
-				"name": $routeParams.category
-			};
+			Category.customObj($routeParams.cid).$loaded(function(cat){
+				$scope.category = {
+					"$id": $routeParams.cid,
+					"name": cat.name
+				};
+			});
+			
 			$scope.account = {
 				"name": '',
 				"balance": 0.00,
@@ -146,4 +149,14 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 			}
 		};
 		}
+	}])
+
+.controller('EditAccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 
+	function($scope, $routeParams, Account, Category, $location){
+		
+	}])
+
+.controller('AccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 
+	function($scope, $routeParams, Account, Category, $location){
+		
 	}]);
