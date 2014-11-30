@@ -7,11 +7,8 @@
 
 <div class="row">
 	<div class="col-xs-9">
-		<!--{% if account.goal %}
-		<h2>{{ account.name }} Goal</h2>
-		<p>${{ account.goal }}</p>
-		{% endif %}-->
 		<h2>Transactions for {{account.name}}</h2>
+		<small>All changes are automatically saved.</small>
 		<br />
 		<table class="table">
 		<tr><th>Date</th><th>Account</th><th>Deposit</th><th>Withdrawal</th><th>Memo</th><th>Edit</th></tr>
@@ -26,7 +23,8 @@
 			<td><a href="{% url 'budget:transaction' t.id account.id %}">Edit</a></td></tr>
 		{% endfor %}-->
 		<tr><td></td><td><strong>Monthly Balance:</strong></td><td>${{balance}}</td><td colspan="3"></td></tr>
-		<tr><td></td><td><strong>Overall Balance:</strong></td><td>${{account.balance}}</td><td colspan="3"></td></tr>
+		<tr><td></td><td><strong>Overall Balance:</strong></td><td>$<input type="text" ng-model="account.balance" /></td>
+			<td><strong>Goal:</strong></td><td>$<input type="text" ng-model="account.goal" /></td><td></td></tr>
 		</table>
 	</div>
 	<div class="col-xs-3 text-center">
@@ -39,11 +37,8 @@
 		<br />
 		<div class="row">
 			<div class="col-xs-12">
-				<!--{% if bank %}
-					<a href="{% url 'budget:banktransaction' %}" class="btn btn-success">Transfer Funds</a>
-				{% else %}
-					<a href="{% url 'budget:addtransaction' account.id %}" class="btn btn-success">Add New Transaction</a>
-				{% endif %}-->
+				<a href="#" ng-show="category.type == 'bank'" class="btn btn-success">Transfer Funds</a>
+				<a href="#" ng-hide="category.type == 'bank'" class="btn btn-success">Add New Transaction</a>
 			</div>
 		</div>
 		<br />
@@ -57,15 +52,15 @@
 		{% endif %}-->
 		<div class="row">
 			<div class="col-xs-12">
-				<a href="{% url 'budget:editaccount' account.id %}" class="btn btn-warning">Edit Account</a>
+				<a href="#/account/{{account.$id}}/edit" class="btn btn-warning">Edit Account</a>
 			</div>
 		</div>
 		<br />
-		<div class="row">
+		<!--<div class="row">
 			<div class="col-xs-12">
 				<a href="{% url 'budget:deleteaccount' account.id %}" class="btn btn-danger">Delete Account</a>
 			</div>
 		</div>
-		<br />
+		<br />-->
 	</div>
 </div>

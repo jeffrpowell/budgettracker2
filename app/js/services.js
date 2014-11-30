@@ -20,6 +20,9 @@ angular.module('budgetTracker.services', [])
 			var accts = fbutil.angularFireRef('account_category/'+cid+'/accounts', {});
 			accts.$remove(aid);
 		},
+		"load": function(cid, callback){
+			fbutil.syncObject('account_category/'+cid, {}).$loaded(callback);
+		},
 		"all": fbutil.syncArray('account_category', {}),
 		"bank": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').startAt('bank').endAt('bank')).$asArray(),
 		"income": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').startAt('income').endAt('income')).$asArray(),
@@ -32,6 +35,9 @@ angular.module('budgetTracker.services', [])
 		"all": fbutil.syncArray('account', {}),
 		"query": function(aid){
 			return fbutil.syncObject('account/'+aid, {});
+		},
+		"load": function(aid, callback){
+			fbutil.syncObject('account/'+aid, {}).$loaded(callback);
 		}
 	};
 }]);

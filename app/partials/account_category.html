@@ -6,6 +6,7 @@
 <div class="row">
 	<div class="col-xs-12">
 		<h2>{{title}} {{category.name}} Category</h2>
+		<small ng-hide="add_mode">All changes are automatically saved.</small>
 		<br /><br />
 	</div>
 </div>
@@ -18,7 +19,7 @@
 			</div>
 			<div class="form-group">
 				<button class="btn btn-primary" ng-click="saveCategory(category)" ng-show="add_mode" ng-disabled="category.name == undefined || category.name == ''">Save</button>
-				<a class="btn btn-primary" href="#/home" ng-hide="add_mode">Go Back</a>
+				<a class="btn btn-primary" href="javascript:history.go(-1);" ng-hide="add_mode">Go Back</a>
 			</div>
 			<p ng-show="err" class="error">{{err}}</p>
 		</form>

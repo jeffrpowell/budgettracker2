@@ -47,7 +47,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 					$scope.bankcatid = $scope.categories.bank[cat].$id;
 					for (var acct in banks[cat].accounts){
 						if (banks[cat].accounts.hasOwnProperty(acct)){
-							Account.query(acct).$loaded().then(function(loadedAcct){
+							Account.load(acct, function(loadedAcct){
 								if (!loadedAcct.hasOwnProperty("parent_account")){
 									//The '0' index here is a hack because we're only
 									//expecting 1 bank category in the app. The reason
@@ -69,7 +69,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 				if (incomes.hasOwnProperty(cat) && incomes[cat].accounts){
 					for (var acct in incomes[cat].accounts){
 						if (incomes[cat].accounts.hasOwnProperty(acct)){
-							/*Account.query(acct).$loaded().then(function(loadedAcct){
+							/*Account.load(acct, function(loadedAcct){
 								$scope.categories.income.cat.accounts.acct = loadedAcct;
 							});*/
 							$scope.categories.income[cat].accounts[acct] = Account.query(acct);
@@ -84,7 +84,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 				if (expenses.hasOwnProperty(cat) && expenses[cat].accounts){
 					for (var acct in expenses[cat].accounts){
 						if (expenses[cat].accounts.hasOwnProperty(acct)){
-							/*Account.query(acct).$loaded().then(function(loadedAcct){
+							/*Account.load(acct, function(loadedAcct){
 								$scope.categories.income.cat.accounts.acct = loadedAcct;
 							});*/
 							$scope.categories.expense[cat].accounts[acct] = Account.query(acct);
@@ -138,7 +138,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 			$location.path('home');
 		}
 		else{
-			Category.customObj($routeParams.cid).$loaded(function(cat){
+			Category.load($routeParams.cid, function(cat){
 				$scope.category = {
 					"$id": $routeParams.cid,
 					"name": cat.name
@@ -188,5 +188,10 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 
 .controller('AccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 
 	function($scope, $routeParams, Account, Category, $location){
-		
+		$scope.account = Account.query($routeParams.aid);
+		Account.query($routeParams.aid).$bindTo($scope, 'account');
+		$scope.balance = 0;
+		Category.load($scope.account.category, function(cat){
+			$scope.category = cat;
+		});
 	}]);
