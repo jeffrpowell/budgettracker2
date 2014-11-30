@@ -97,32 +97,21 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
   
 .controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', '$location', 
 	function($scope, $routeParams, Category, $location){
-		var setupCategory = function(cat){
-			$scope.category = cat;//list.$getRecord($routeParams.cid);
-
-			if ($scope.category.$id === "undefined"){
+		if ($routeParams.type === "income" || $routeParams.type === "expense" || $routeParams.type === "bank"){
+			if ($routeParams.cid === null || !$routeParams.cid){
 				$scope.category = {
 					'name': ''
 				};
-				$scope.title = "Add New ";
+				$scope.title = "Add New";
 				$scope.add_mode = true;
+				$scope.category.type = $routeParams.type;
 			}
 			else{
-				$scope.title = "Edit " + $scope.category.name + " ";
+				$scope.category = Category.customObj($routeParams.cid);
+				Category.customObj($routeParams.cid).$bindTo($scope, 'category');
 				$scope.add_mode = false;
+				$scope.title = "Edit";
 			}
-			$scope.category.type = $routeParams.type;
-		};
-		
-		if ($routeParams.cid === null && ($routeParams.type === "income" || $routeParams.type === "expense" || $routeParams.type === "bank")){
-			$scope.category = {
-				'name': ''
-			};
-			$scope.title = "Add New ";
-			$scope.add_mode = true;
-		}
-		else if ($routeParams.type === "income" || $routeParams.type === "expense" || $routeParams.type === "bank"){
-			Category.customObj($routeParams.cid).$loaded().then(setupCategory);
 		}
 		else{
 			$location.path('home');
