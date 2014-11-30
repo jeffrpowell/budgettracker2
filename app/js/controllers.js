@@ -191,7 +191,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 		$scope.account = Account.query($routeParams.aid);
 		Account.query($routeParams.aid).$bindTo($scope, 'account');
 		$scope.balance = 0;
-		Category.load($scope.account.category, function(cat){
-			$scope.category = cat;
+		Account.load($routeParams.aid, function(acct){
+			Category.load(acct.category, function(cat){
+				$scope.category = cat;
+			});
 		});
 	}]);
