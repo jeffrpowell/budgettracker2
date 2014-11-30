@@ -27,18 +27,6 @@ angular.module('budgetTracker.services', [])
 	};
 }])
 
-.factory('BankCategory', ['fbutil', function(fbutil){
-	return fbutil.syncArray('account_category/bank', {});
-}])
-
-.factory('IncomeCategory', ['fbutil', function(fbutil){
-	return fbutil.syncArray('account_category/income', {});
-}])
-
-.factory('ExpenseCategory', ['fbutil', function(fbutil){
-	return fbutil.syncArray('account_category/expense', {});
-}])
-
 .factory('Account', ['fbutil', function(fbutil){
 	return {
 		"all": fbutil.syncArray('account', {}),
