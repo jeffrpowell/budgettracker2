@@ -39,6 +39,30 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 ['$scope', 'Category', 'Account', 
 	function($scope, Category, Account) {
 		$scope.categories = {};
+		Category.bank.$loaded(function(banks){
+			$scope.categories.bank = banks;
+			for (var cat in banks) {
+				if (banks.hasOwnProperty(cat) && banks[cat].accounts){
+					//We're counting on there being only 1 bank category
+					$scope.bankcatid = $scope.categories.bank[cat].$id;
+					for (var acct in banks[cat].accounts){
+						if (banks[cat].accounts.hasOwnProperty(acct)){
+							Account.query(acct).$loaded().then(function(loadedAcct){
+								if (!loadedAcct.hasOwnProperty("parent_account")){
+									//The '0' index here is a hack because we're only
+									//expecting 1 bank category in the app. The reason
+									//why I don't use 'cat' to index is because the parent
+									//function async. looped through each property from
+									//line 44 before hitting this line
+									$scope.categories.bank[0].accounts[loadedAcct.$id] = loadedAcct;
+								}
+							});
+							//$scope.categories.bank[cat].accounts[acct] = Account.query(acct);
+						}
+					}
+				}
+			}
+		});
 		Category.income.$loaded(function(incomes){
 			$scope.categories.income = incomes;
 			for (var cat in incomes) {
@@ -138,6 +162,13 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 				"category": $routeParams.cid,
 				"goal_account": false
 			};
+			
+			if ($routeParams.type === "bank"){
+				$scope.bank = true;
+			}
+			else{
+				$scope.bank = false;
+			}
 			$scope.saveAccount = function(){
 			if ($scope.account){
 				//TODO: validation framework

@@ -12,12 +12,17 @@
             </div>
             <table class="table table-bordered panel-body">
                 <tr><th>Accounts</th><th class="text-right">Balance</th></tr>
-                <!--{% for acct in bank_category.accounts %}
+                
+				<!--{% for acct in category.accounts %}-->
+				<tr ng-repeat="acct in categories.bank[0].accounts">
+					<td><a href="#">{{acct.name}}</a></td><td class="text-right">${{acct.balance}}</td>
+				</tr>
+				<!--{% for acct in bank_category.accounts %}
                 {% if not acct.parent_account %}
                 <tr><td><a href="{% if month_persist %}{% url 'budget:account' acct.id month year %}{% else %}{% url 'budget:account' acct.id %}{% endif %}">{{ acct.name }}</a></td><td class="text-right">${{ acct.balance }}</td></tr>
                 {% endif %}
                 {% endfor %}-->
-                <tr><td colspan="2" class="text-right"><a href="#/account/add">Add New Account</a> / 
+                <tr><td colspan="2" class="text-right"><a href="#/account/add?cid={{categories.bank[0].$id}}&type=bank">Add New Account</a> / 
 						<a href="#">Transfer Funds</a></td></tr>
             </table>
         </div>
@@ -94,7 +99,7 @@
 						</tr>
 						<tr><th>Category</th><th class="text-center" colspan="2">Projected</th><th class="text-center" colspan="2">Actual</th><th class="text-center">Difference</th><th>Actions</th></tr>
 						<tr ng-repeat-start="cat in categories.income"><td colspan="6"><h4><a href="#/category/income/{{cat.$id}}">{{cat.name}}</a></h4></td>
-							<td><a href="#/account/add?cid={{cat.$id}}">Add Account</a></td>
+							<td><a href="#/account/add?cid={{cat.$id}}&type=income">Add Account</a></td>
 						</tr>
 						<!--{% for acct in category.accounts %}-->
 						<tr ng-repeat="acct in cat.accounts">
@@ -131,7 +136,7 @@
 						</tr>
 						<tr><th>Category</th><th class="text-center" colspan="2">Projected</th><th class="text-center" colspan="2">Actual</th><th class="text-center">Difference</th><th>Actions</th></tr>
 						<tr ng-repeat-start="cat in categories.expense"><td colspan="6"><h4><a href="#/category/expense/{{cat.$id}}">{{cat.name}}</a></h4></td>
-							<td><a href="#/account/add?cid={{cat.$id}}">Add Account</a></td>
+							<td><a href="#/account/add?cid={{cat.$id}}&type=expense">Add Account</a></td>
 						</tr>
 						<!--{% for acct in category.accounts %}-->
 						<tr ng-repeat="acct in cat.accounts">
