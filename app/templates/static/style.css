@@ -1,0 +1,91 @@
+/*
+	key-color: #7F7F7F;
+	tint-color: #C0C0C0;
+	shade-color: #404040;
+	white-color: #FFFFFF;
+	black-color: #000000;
+	accent-color: #909090;
+*/
+
+#content{
+	background-color: #C0C0C0;
+}
+
+caption {
+	text-align: left;
+	font-size: 12px;
+	margin-left: 9px;
+}
+
+.success-bg {
+	background-color: #DFF0D8;
+}
+
+.danger-bg {
+	background-color: #F2DEDE;
+}
+
+.info-bg {
+	background-color: #D9EDF7;
+}
+
+.primary-bg {
+	background-color: #428BCA;
+}
+
+.warning-bg {
+	background-color: #FCF8E3;
+}
+
+.default-bg {
+	background-color: /*#F5F5F5*/ #E8E8E8;
+}
+
+.glyphicon-chevron-left, .glyphicon-chevron-right{
+	cursor: pointer;
+}
+
+.negative {
+	color: #D9534F;
+}
+
+.bar {
+    position: relative;
+    border: 1px solid black;
+    color: black;
+    display: block;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    height: 35px;
+    line-height: 35px;
+    background: linear-gradient(to right, #FFFFFF 0%, #BBFFBB 100%);
+    margin-bottom: 5px;
+}
+
+.bar > span {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    background: linear-gradient(to right, #CBFFCB 0%, #00CC55 100%);
+}
+
+.bar > p {
+    display: inline;
+    position: relative;
+    z-index: 1;
+}
+
+td.no-left-border {
+	border-left: 0px none black !important;
+}
+
+td.no-right-border {
+	border-right: 0px none black !important;
+}
+
+.strikethrough {
+	text-decoration: line-through;
+}
