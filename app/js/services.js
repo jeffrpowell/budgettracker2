@@ -40,6 +40,12 @@ angular.module('budgetTracker.services', [])
 			fbutil.syncObject('account/'+aid, {}).$loaded(callback);
 		}
 	};
+}])
+
+.factory('Transaction', ['fbutil', function(fbutil){
+	return {
+		"all": fbutil.syncArray('transaction', {})
+	};
 }]);
 /*
  * .factory('messageList', ['fbutil', function(fbutil) {

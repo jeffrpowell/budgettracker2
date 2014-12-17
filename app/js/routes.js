@@ -43,6 +43,11 @@ angular.module('budgetTracker.routes', ['ngRoute', 'simpleLogin'])
 		templateUrl: 'partials/account.html',
 		controller: 'AccountCtrl',
 		authRequired: true
+	},
+	'/transaction/add': {
+		templateUrl: 'partials/addtransaction.html',
+		controller: 'AddTransactionCtrl',
+		authRequired: true
 	}
   })
 

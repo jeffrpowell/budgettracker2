@@ -196,4 +196,11 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 				$scope.category = cat;
 			});
 		});
+	}])
+		
+.controller('AddTransactionCtrl',['$scope', '$routeParams', 'Account', 'Transaction', '$location', 
+	function($scope, $routeParams, Account, Transaction, $location){
+		if (!$routeParams.aid){
+			$location.path('home');
+		}
 	}]);
