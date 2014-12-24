@@ -38,6 +38,10 @@ angular.module('budgetTracker.services', [])
 		},
 		"load": function(aid, callback){
 			fbutil.syncObject('account/'+aid, {}).$loaded(callback);
+		},
+		"remove": function(aid){
+			var accts = fbutil.angularFireRef('account/', {});
+			accts.$remove(aid);
 		}
 	};
 }])

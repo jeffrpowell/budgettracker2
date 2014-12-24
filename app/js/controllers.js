@@ -170,6 +170,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 
 .controller('EditAccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 
 	function($scope, $routeParams, Account, Category, $location){
+		$scope.aid = $routeParams.aid;
 		$scope.account = Account.query($routeParams.aid);
 		Category.all.$loaded(function(cats){
 			$scope.categories = cats;
@@ -181,6 +182,11 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 			Category.removeAcct($scope.originalCategory, $scope.account.$id);
 			Category.addAcct($scope.account.category, $scope.account.$id);
 			$scope.originalCategory = $scope.account.category;
+		};
+		$scope.deleteAccount = function(){
+			Category.removeAcct($scope.account.category, $scope.account.$id);
+			Account.remove($scope.aid);
+			$location.path('home');
 		};
 	}])
 
