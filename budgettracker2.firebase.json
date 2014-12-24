@@ -1,0 +1,87 @@
+{
+  "account" : {
+    "-JaCcg5A7AbUNxDvJPUl" : {
+      "balance" : 0,
+      "category" : "-JaCIqFEaQqgWgAO2h7K",
+      "goal" : 0,
+      "goal_account" : false,
+      "name" : "Jeff's Income"
+    },
+    "-JaDTcXBHcWR3Gc-oKIP" : {
+      "balance" : 0,
+      "category" : "-JaCPWm8XojMdEMxRfmk",
+      "goal_account" : false,
+      "name" : "Education Fund"
+    },
+    "-JaDTqgUpoMzgOBAv8B-" : {
+      "balance" : 0,
+      "category" : "-JaCPWm8XojMdEMxRfmk",
+      "goal_account" : false,
+      "name" : "Maria's Parents"
+    },
+    "-JbsWBaPS5gMwBESNlBa" : {
+      "balance" : 0,
+      "category" : "-JaD7hXXMuvJVt96bE8k",
+      "goal_account" : false,
+      "name" : "Tithing"
+    },
+    "-JbsYynm2kUAVx24f38g" : {
+      "balance" : 0,
+      "category" : "-JaCIuL1pN5l5TYz5GUZ",
+      "goal_account" : false,
+      "name" : "Rent"
+    },
+    "-JbzErw0M7KOvx1VIdlj" : {
+      "balance" : 0,
+      "category" : "-JaBbDwlkV8FosmF1Rr-",
+      "goal_account" : false,
+      "name" : "Checking Account"
+    },
+    "-JbzGg2kyQ4NT-6LzHC_" : {
+      "balance" : 0,
+      "category" : "-JaBbDwlkV8FosmF1Rr-",
+      "goal_account" : false,
+      "name" : "Savings Account"
+    }
+  },
+  "account_category" : {
+    "-JaBbDwlkV8FosmF1Rr-" : {
+      "accounts" : {
+        "-JbzErw0M7KOvx1VIdlj" : "-JbzErw0M7KOvx1VIdlj",
+        "-JbzGg2kyQ4NT-6LzHC_" : "-JbzGg2kyQ4NT-6LzHC_"
+      },
+      "name" : "Bank Accounts",
+      "type" : "bank"
+    },
+    "-JaCIqFEaQqgWgAO2h7K" : {
+      "accounts" : {
+        "-JaCcg5A7AbUNxDvJPUl" : "-JaCcg5A7AbUNxDvJPUl"
+      },
+      "name" : "Tithable Income",
+      "type" : "income"
+    },
+    "-JaCIuL1pN5l5TYz5GUZ" : {
+      "accounts" : {
+        "-JbsYynm2kUAVx24f38g" : "-JbsYynm2kUAVx24f38g"
+      },
+      "name" : "Home & Bills",
+      "type" : "expense"
+    },
+    "-JaCPWm8XojMdEMxRfmk" : {
+      "accounts" : {
+        "-JaDTcXBHcWR3Gc-oKIP" : "-JaDTcXBHcWR3Gc-oKIP",
+        "-JaDTqgUpoMzgOBAv8B-" : "-JaDTqgUpoMzgOBAv8B-"
+      },
+      "name" : "Help Funds",
+      "type" : "income"
+    },
+    "-JaD7hXXMuvJVt96bE8k" : {
+      "accounts" : {
+        "-JbsWBaPS5gMwBESNlBa" : "-JbsWBaPS5gMwBESNlBa"
+      },
+      "name" : "Church",
+      "type" : "expense"
+    }
+  }
+}
+

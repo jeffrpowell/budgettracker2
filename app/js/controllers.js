@@ -152,12 +152,10 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 				"goal_account": false
 			};
 			
-			if ($routeParams.type === "bank"){
-				$scope.bank = true;
+			if ($routeParams.aid && $routeParams.type === "bank"){
+				$scope.parentAccount = Account.query($routeParams.aid);
 			}
-			else{
-				$scope.bank = false;
-			}
+			
 			$scope.saveAccount = function(){
 			if ($scope.account){
 				//TODO: validation framework
