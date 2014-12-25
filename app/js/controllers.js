@@ -95,14 +95,13 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 		});
 	}])
   
-.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', '$location', 
-	function($scope, $routeParams, Category, $location){
+.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', 'ServiceUtils', '$location', 
+	function($scope, $routeParams, Category, ServiceUtils, $location){
 		if ($routeParams.type === "income" || $routeParams.type === "expense" || $routeParams.type === "bank"){
 			if ($routeParams.cid === null || !$routeParams.cid){
 				$scope.category = {
 					'name': ''
 				};
-				$scope.title = "Add New";
 				$scope.add_mode = true;
 				$scope.category.type = $routeParams.type;
 			}
@@ -110,7 +109,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				$scope.category = Category.customObj($routeParams.cid);
 				Category.customObj($routeParams.cid).$bindTo($scope, 'category');
 				$scope.add_mode = false;
-				$scope.title = "Edit";
+				$scope.cid = $routeParams.cid;
 			}
 		}
 		else{
@@ -128,6 +127,10 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				}
 				$location.path('home');
 			}
+		};
+		
+		$scope.deleteCategory = function(){
+			ServiceUtils.deleteCategory($scope.cid);
 		};
 	}])
 

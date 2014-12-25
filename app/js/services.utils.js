@@ -36,5 +36,9 @@ angular.module('budgetTracker.services.utils', ['budgetTracker.services'])
 				/*
 				 * foreach account in category, removeAccount()
 				 */
+				
+				Category.remove(cid).then(function(ref){
+					$location.path('home');
+				});
 			}
 		}]);

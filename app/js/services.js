@@ -20,6 +20,10 @@ angular.module('budgetTracker.services', [])
 			var accts = fbutil.angularFireRef('account_category/'+cid+'/accounts', {});
 			return accts.$remove(aid);
 		},
+		"remove": function(cid){
+			var cats = fbutil.angularFireRef('account_category/', {});
+			return cats.$remove(cid);
+		},
 		"load": function(cid, callback){
 			fbutil.syncObject('account_category/'+cid, {}).$loaded(callback);
 		},
