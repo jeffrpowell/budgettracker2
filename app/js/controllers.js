@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
+angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'budgetTracker.services.utils'])
 
 .controller('LoginCtrl', ['$scope', 'simpleLogin', '$location', function($scope, simpleLogin, $location) {
     $scope.email = null;
@@ -169,8 +169,8 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 		}
 	}])
 
-.controller('EditAccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 
-	function($scope, $routeParams, Account, Category, $location){
+.controller('EditAccountCtrl',['$scope', '$routeParams', 'Account', 'Category', 'ServiceUtils', '$location', 
+	function($scope, $routeParams, Account, Category, ServiceUtils, $location){
 		$scope.aid = $routeParams.aid;
 		$scope.account = Account.query($routeParams.aid);
 		Category.all.$loaded(function(cats){
@@ -187,11 +187,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 			});
 		};
 		$scope.deleteAccount = function(){
-			Category.removeAcct($scope.account.category, $scope.account.$id).then(function(ref){
-				Account.remove($scope.aid).then(function(innerRef){
-					$location.path('home');
-				});
-			});
+			ServiceUtils.deleteAccount($scope.account.category, $scope.aid);
 		};
 	}])
 
