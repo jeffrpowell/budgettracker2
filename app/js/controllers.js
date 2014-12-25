@@ -160,8 +160,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 			if ($scope.account){
 				//TODO: validation framework
 				Account.all.$add($scope.account).then(function(ref){
-					Category.addAcct($routeParams.cid, ref.name());
-					$location.path('home');
+					Category.addAcct($routeParams.cid, ref.name()).then(function(innerRef){
+						$location.path('home');
+					});
 				});
 			}
 		};
@@ -179,14 +180,18 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin'])
 		});
 		Account.query($routeParams.aid).$bindTo($scope, 'account');
 		$scope.changeCategory = function(){
-			Category.removeAcct($scope.originalCategory, $scope.account.$id);
-			Category.addAcct($scope.account.category, $scope.account.$id);
-			$scope.originalCategory = $scope.account.category;
+			Category.removeAcct($scope.originalCategory, $scope.account.$id).then(function(ref){
+				Category.addAcct($scope.account.category, $scope.account.$id).then(function(innerRef){
+					$scope.originalCategory = $scope.account.category;
+				});
+			});
 		};
 		$scope.deleteAccount = function(){
-			Category.removeAcct($scope.account.category, $scope.account.$id);
-			Account.remove($scope.aid);
-			$location.path('home');
+			Category.removeAcct($scope.account.category, $scope.account.$id).then(function(ref){
+				Account.remove($scope.aid).then(function(innerRef){
+					$location.path('home');
+				});
+			});
 		};
 	}])
 

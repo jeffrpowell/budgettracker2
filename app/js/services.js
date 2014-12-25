@@ -14,11 +14,11 @@ angular.module('budgetTracker.services', [])
 		},
 		"addAcct": function(cid, aid){
 			var arr = fbutil.angularFireRef('account_category/'+cid+'/accounts', {});
-			arr.$set(aid, aid);
+			return arr.$set(aid, aid);
 		},
 		"removeAcct": function(cid, aid){
 			var accts = fbutil.angularFireRef('account_category/'+cid+'/accounts', {});
-			accts.$remove(aid);
+			return accts.$remove(aid);
 		},
 		"load": function(cid, callback){
 			fbutil.syncObject('account_category/'+cid, {}).$loaded(callback);
@@ -41,7 +41,7 @@ angular.module('budgetTracker.services', [])
 		},
 		"remove": function(aid){
 			var accts = fbutil.angularFireRef('account/', {});
-			accts.$remove(aid);
+			return accts.$remove(aid);
 		}
 	};
 }])
