@@ -7,6 +7,17 @@
 
 <div class="row">
 	<div class="col-xs-9">
+		<h2>Fund Allocation</h2>
+		<br />
+		<table class="table" ng-show="">
+		<tr><th>Account</th><th>Current Allocation</th></tr>
+		<tr ng-repeat="sub in subaccounts">
+			<td><a href="#/account/{{sub.$id}}">{{ sub.name }}</a></td><td>${{ sub.balance }}</td>
+		</tr>
+		<tr><td><strong>Unallocated Balance:</strong></td><td>${{ account.balance }}</td>
+		<tr><td><strong>Total Balance:</strong></td><td>${{ total_balance }}</td>
+		</table>
+		
 		<h2>Transactions for {{account.name}}</h2>
 		<small>All changes are automatically saved.</small>
 		<br />
@@ -25,6 +36,7 @@
 		<tr><td></td><td><strong>Monthly Balance:</strong></td><td>${{balance}}</td><td colspan="3"></td></tr>
 		<tr><td></td><td><strong>Overall Balance:</strong></td><td>$<input type="text" ng-model="account.balance" /></td>
 			<td><strong>Goal:</strong></td><td>$<input type="text" ng-model="account.goal" /></td><td></td></tr>
+		<tr><td colspan="6">{{originalCategory}}</td></tr>
 		</table>
 	</div>
 	<div class="col-xs-3 text-center">
@@ -37,22 +49,20 @@
 		<br />
 		<div class="row">
 			<div class="col-xs-12">
-				<a href="#" ng-show="category.type == 'bank'" class="btn btn-success">Transfer Funds</a>
-				<a href="#" ng-hide="category.type == 'bank'" class="btn btn-success">Add New Transaction</a>
+				<a href="#" ng-show="category.type === 'bank'" class="btn btn-success">Transfer Funds</a>
+				<a href="#" ng-hide="category.type === 'bank'" class="btn btn-success">Add New Transaction</a>
 			</div>
 		</div>
 		<br />
-		<!--{% if bank and can_add_subaccts %}
-		<div class="row">
-			<div class="col-xs-12">
-				<a href="{% url 'budget:addsubaccount' account.id %}" class="btn btn-info">Add Sub-account</a>
-			</div>
-		</div>
-		<br />
-		{% endif %}-->
 		<div class="row">
 			<div class="col-xs-12">
 				<a href="#/account/{{account.$id}}/edit" class="btn btn-warning">Edit Account</a>
+			</div>
+		</div>
+		<br />
+		<div class="row" ng-show="canAddSub">
+			<div class="col-xs-12">
+				<a href="#/account/add?cid={{category.$id}}&aid={{account.$id}}&type={{category.type}}" class="btn btn-info">Add Sub-account</a>
 			</div>
 		</div>
 		<br />

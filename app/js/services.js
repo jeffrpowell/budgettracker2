@@ -46,6 +46,18 @@ angular.module('budgetTracker.services', [])
 		"remove": function(aid){
 			var accts = fbutil.angularFireRef('account/', {});
 			return accts.$remove(aid);
+		},
+		"subaccounts": function(aid){
+			var subAccounts;
+			var accts = fbutil.syncArray('account', {}).$loaded(function(ref){
+				subAccounts = {};
+				for (var acct in ref){
+					if (ref.hasOwnProperty(acct) && acct.hasOwnProperty("parent_account") && acct.parent_account === aid){
+						subAccounts[acct.$id] = acct;
+					}
+				}
+			});
+			return subAccounts;
 		}
 	};
 }])

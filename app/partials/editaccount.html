@@ -21,8 +21,8 @@
 			<select id="id_category" ng-model="account.category" ng-change="changeCategory()" ng-options="cat.$id as cat.name group by cat.type for cat in categories" class="form-control"></select>
 		</div>
 		<div class="form-group">
-			<label for="id_parent_account">Make this account a subset of </label>
-			<select id="id_parent_account" ng-model="account.parent_account" class="form-control"></select>
+			<label>Parent Account:</label>
+			{{parentAccount.name}}
 		</div>
 		<div class="form-group">
 			<label for="id_balance">Current Balance ($):</label>
