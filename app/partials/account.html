@@ -7,17 +7,18 @@
 
 <div class="row">
 	<div class="col-xs-9">
-		<h2>Fund Allocation</h2>
-		<br />
-		<table class="table" ng-show="">
-		<tr><th>Account</th><th>Current Allocation</th></tr>
-		<tr ng-repeat="sub in subaccounts">
-			<td><a href="#/account/{{sub.$id}}">{{ sub.name }}</a></td><td>${{ sub.balance }}</td>
-		</tr>
-		<tr><td><strong>Unallocated Balance:</strong></td><td>${{ account.balance }}</td>
-		<tr><td><strong>Total Balance:</strong></td><td>${{ total_balance }}</td>
-		</table>
-		
+		<div id="subAccounts" ng-show="showSubAccounts">
+			<h2>Fund Allocation</h2>
+			<br />
+			<table class="table">
+			<tr><th>Account</th><th>Current Allocation</th></tr>
+			<tr ng-repeat="sub in subaccounts">
+				<td><a href="#/account/{{sub.$id}}">{{ sub.name }}</a></td><td>${{ sub.balance }}</td>
+			</tr>
+			<tr><td><strong>Unallocated Balance:</strong></td><td>${{ account.balance }}</td>
+			<tr><td><strong>Total Balance:</strong></td><td>${{ total_balance }}</td>
+			</table>
+		</div>
 		<h2>Transactions for {{account.name}}</h2>
 		<small>All changes are automatically saved.</small>
 		<br />

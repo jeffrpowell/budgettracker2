@@ -190,11 +190,13 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			$scope.originalCategory = $scope.account.category;
 		});
 		Account.query($routeParams.aid).$bindTo($scope, 'account');
-		if ($scope.account.parent_account){
-			Account.load($scope.account.parent_account, function(acct){
-				$scope.parentAccount = acct;
-			});
-		}
+		Account.load($scope.account.$id, function(acct){
+			if (acct.hasOwnProperty("parent_account")){
+				Account.load(acct.parent_account, function(parentAcct){
+					$scope.parentAccount = parentAcct;
+				});
+			}
+		});
 		$scope.changeCategory = function(){
 			Category.removeAcct($scope.originalCategory, $scope.account.$id).then(function(ref){
 				Category.addAcct($scope.account.category, $scope.account.$id).then(function(innerRef){
@@ -217,7 +219,16 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				$scope.category = cat;
 				if ($scope.category.type === 'bank' && (!$scope.account.hasOwnProperty("parent_account") || $scope.account.parent_account === '')){
 					$scope.canAddSub = true;
-					$scope.subAccounts = Account.subaccounts($routeParams.aid);
+					$scope.subaccounts = {};
+					Account.all.$loaded(function(ref){
+						for (var key in ref) {
+							var acct = ref[key];
+							if (acct.hasOwnProperty("parent_account") && acct.parent_account === $routeParams.aid){
+								$scope.subaccounts[acct.$id] = acct;
+							}
+						}
+						$scope.showSubAccounts = Object.keys($scope.subaccounts).length > 0;
+					});
 				}
 				else{
 					$scope.canAddSub = false;
