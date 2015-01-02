@@ -16,7 +16,7 @@
 				{{parentAccount.name}}
 			</div>
 			<div class="form-group">
-				<button class="btn btn-primary" ng-click="saveAccount(account)" ng-disabled="account.name === undefined || account.name === ''">Save</button>
+				<button class="btn btn-primary" ng-click="saveAccount()" ng-disabled="account.name === undefined || account.name === ''">Save</button>
 			</div>
 			<p ng-show="err" class="error">{{err}}</p>
 		</form>
