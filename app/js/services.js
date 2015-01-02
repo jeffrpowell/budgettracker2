@@ -52,7 +52,14 @@ angular.module('budgetTracker.services', [])
 
 .factory('Transaction', ['fbutil', function(fbutil){
 	return {
-		"all": fbutil.syncArray('transaction', {})
+		"all": fbutil.syncArray('transaction', {}),
+		"load": function(tid, callback){
+			fbutil.syncObject('transaction/'+tid, {}).$loaded(callback);
+		},
+		"remove": function(tid){
+			var trans = fbutil.angularFireRef('transaction/', {});
+			return trans.$remove(tid);
+		}
 	};
 }]);
 /*

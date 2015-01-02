@@ -5,35 +5,31 @@
 
 <div class="row">
 	<div class="col-xs-12">
-		<h2>New Purchase under {{ account }}</h2>
+		<h2>New Purchase under {{ account.name }}</h2>
 		<br /><br />
 	</div>
 </div>
 <div class="row">
 	<div class="col-xs-3">
-		{% if error_message %}<p>{{ error_message }}</p>{% endif %}
-		<form role="form" action="{% url 'budget:addtransaction' account.id %}" method="post">
-			{% csrf_token %}
+		<form role="form">
 			<div class="form-group">
 				<label for="id_date">Date:</label>
-				{{ form.date }}
+				<input type="date" id="id_date" name="date" class="form-control" ng-model='transaction.date' placeholder="yyyy-mm-dd" min="2011-01-01" max="2020-12-31"/>
 			</div>
 			<div class="form-group">
 				<label for="id_from_account">From:</label>
-				{{ form.from_account }}
-			</div>
-			<div class="form-group">
-				<label for="id_amount">Amount Charged:</label>
-				{# Mimics {{ form.amount }}, but done manually to add class to input #}
-				<input id="id_amount" type="number" step="0.01" name="amount" class="form-control">
+				{{ transaction.accounts.from }}
 			</div>
 			<div class="form-group">
 				<label for="id_memo">Memo:</label>
-
-				<input id="id_memo" type="text" name="memo" maxlength="300" class="form-control">
+				<input type="text" ng-model="transaction.memo" name="name" maxlength="300" id="id_memo" class="form-control">
 			</div>
 			<div class="form-group">
-				<input type="submit" class="btn btn-primary" value="Save" />
+				<label for="id_amount">Amount Charged:</label>
+				<input id="id_amount" type="number" step="0.01" name="amount" class="form-control" ng-model="transaction.amount" />
+			</div>
+			<div class="form-group">
+				<button class="btn btn-primary" ng-click="saveTransaction()">Save</button>
 			</div>
 		</form>
 	</div>

@@ -50,8 +50,8 @@
 		<br />
 		<div class="row">
 			<div class="col-xs-12">
-				<a href="#" ng-show="category.type === 'bank'" class="btn btn-success">Transfer Funds</a>
-				<a href="#" ng-hide="category.type === 'bank'" class="btn btn-success">Add New Transaction</a>
+				<a href="#/transaction/add" ng-show="category.type === 'bank'" class="btn btn-success">Transfer Funds</a>
+				<a href="#/transaction/add?aid={{account.$id}}" ng-hide="category.type === 'bank'" class="btn btn-success">Add New Transaction</a>
 			</div>
 		</div>
 		<br />

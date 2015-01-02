@@ -168,15 +168,15 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			}
 			
 			$scope.saveAccount = function(){
-			if ($scope.account){
-				//TODO: validation framework
-				Account.all.$add($scope.account).then(function(ref){
-					Category.addAcct($routeParams.cid, ref.name()).then(function(innerRef){
-						$location.path('home');
+				if ($scope.account){
+					//TODO: validation framework
+					Account.all.$add($scope.account).then(function(ref){
+						Category.addAcct($routeParams.cid, ref.name()).then(function(innerRef){
+							$location.path('home');
+						});
 					});
-				});
-			}
-		};
+				}
+			};
 		}
 	}])
 
@@ -238,8 +238,41 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 	}])
 		
 .controller('AddTransactionCtrl',['$scope', '$routeParams', 'Account', 'Transaction', '$location', 
+	
 	function($scope, $routeParams, Account, Transaction, $location){
 		if (!$routeParams.aid){
 			$location.path('home');
+		}
+		else{
+			Account.load($routeParams.aid, function(acct){
+				$scope.account = acct;
+			});
+			//http://stackoverflow.com/questions/1531093/how-to-get-current-date-in-javascript/
+			var today = new Date();
+			var dd = today.getDate();
+			var mm = today.getMonth()+1; //January is 0!
+			var yyyy = today.getFullYear();
+			if(dd<10) {
+				dd='0'+dd;
+			} 
+			if(mm<10) {
+				mm='0'+mm;
+			} 
+			today = yyyy+'-'+mm+'-'+dd;
+			$scope.transaction = {
+				'date': today, 
+				'accounts': {
+					'to':$routeParams.aid
+				},
+				'amount': 0,
+				'projection': false, 
+				'memo': ''
+			};
+			$scope.saveTransaction = function(){
+				if ($scope.transaction){
+					//TODO: validation framework
+					Transaction.all.$add($scope.transaction);
+				}
+			};
 		}
 	}]);
