@@ -21,8 +21,10 @@
       "$account_id": {
 		".validate": "newData.hasChildren(['name', 'balance', 'category', 'goal_account'])",
         "category":{
-          ".validate": "root.child('account_category/'+newData.val()).exists()"
-        },
+			".validate": "newData.hasChildren(['id', 'type'])",
+			"id": {".validate": "root.child('account_category/'+newData.val()).exists()"},
+			"type": {".validate": "newData.val() == 'expense' || newData.val() == 'income' || newData.val() == 'bank'"}
+		},
         "name": {".validate": "newData.isString() && newData.val().length > 0"},
         "balance": {".validate": "newData.isNumber()"},
         "goal": {".validate": "newData.isNumber()"},

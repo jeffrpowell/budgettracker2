@@ -18,7 +18,7 @@
 		</div>
 		<div class="form-group">
 			<label for="id_category">Category:</label>
-			<select id="id_category" ng-model="account.category" ng-change="changeCategory()" ng-options="cat.$id as cat.name group by cat.type for cat in categories" class="form-control"></select>
+			<select id="id_category" ng-model="account.category.id" ng-change="changeCategory()" ng-options="cat.$id as cat.name group by cat.type for cat in categories" class="form-control"></select>
 		</div>
 		<div class="form-group">
 			<label>Parent Account:</label>

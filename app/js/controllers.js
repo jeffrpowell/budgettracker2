@@ -154,7 +154,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			$scope.account = {
 				"name": '',
 				"balance": 0.00,
-				"category": $routeParams.cid,
+				"category": {"id": $routeParams.cid, "type": $routeParams.type},
 				"goal_account": false
 			};
 			
@@ -184,12 +184,13 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 	function($scope, $routeParams, Account, Category, ServiceUtils){
 		$scope.aid = $routeParams.aid;
 		$scope.account = Account.query($routeParams.aid);
-		Category.all.$loaded(function(cats){
-			$scope.categories = cats;
-			//$scope.originalCategory = cats.$indexFor($scope.account.category);
-			$scope.originalCategory = $scope.account.category;
+		Account.query($routeParams.aid).$bindTo($scope, 'account').then(function(){
+			Category.all.$loaded(function(cats){
+				$scope.categories = cats;
+				//$scope.originalCategory = cats.$indexFor($scope.account.category);
+				$scope.originalCategory = $scope.account.category.id;
+			});
 		});
-		Account.query($routeParams.aid).$bindTo($scope, 'account');
 		Account.load($scope.account.$id, function(acct){
 			if (acct.hasOwnProperty("parent_account")){
 				Account.load(acct.parent_account, function(parentAcct){
@@ -198,9 +199,15 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			}
 		});
 		$scope.changeCategory = function(){
+			for (var cat in $scope.categories){
+				if (cat.hasOwnProperty("$id") && cat.$id === $scope.account.category.id){
+					$scope.account.category.type = cat.type;
+					break;
+				}
+			}
 			Category.removeAcct($scope.originalCategory, $scope.account.$id).then(function(ref){
-				Category.addAcct($scope.account.category, $scope.account.$id).then(function(innerRef){
-					$scope.originalCategory = $scope.account.category;
+				Category.addAcct($scope.account.category.id, $scope.account.$id).then(function(innerRef){
+					$scope.originalCategory = $scope.account.category.id;
 				});
 			});
 		};
@@ -215,7 +222,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 		Account.query($routeParams.aid).$bindTo($scope, 'account');
 		$scope.balance = 0;
 		Account.load($routeParams.aid, function(acct){
-			Category.load(acct.category, function(cat){
+			Category.load(acct.category.id, function(cat){
 				$scope.category = cat;
 				if ($scope.category.type === 'bank' && (!$scope.account.hasOwnProperty("parent_account") || $scope.account.parent_account === '')){
 					$scope.canAddSub = true;
