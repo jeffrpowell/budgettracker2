@@ -46,7 +46,10 @@ angular.module('budgetTracker.services', [])
 		"remove": function(aid){
 			var accts = fbutil.angularFireRef('account/', {});
 			return accts.$remove(aid);
-		}
+		},
+		"bank": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category/type').startAt('bank').endAt('bank')).$asArray(),
+		"income": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category/type').startAt('income').endAt('income')).$asArray(),
+		"expense": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category/type').startAt('expense').endAt('expense')).$asArray()
 	};
 }])
 
