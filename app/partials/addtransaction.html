@@ -18,7 +18,7 @@
 			</div>
 			<div class="form-group">
 				<label for="id_from_account">From:</label>
-				{{ transaction.accounts.from }}
+				<select id="id_from_account" ng-model="transaction.accounts.from" ng-options="acct.$id as acct.name for acct in bankAccounts" class="form-control"></select>
 			</div>
 			<div class="form-group">
 				<label for="id_memo">Memo:</label>

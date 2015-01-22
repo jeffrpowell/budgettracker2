@@ -275,10 +275,19 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				'projection': false, 
 				'memo': ''
 			};
+			Account.bank.$loaded(function(accts){
+				$scope.bankAccounts = accts;
+				for (var acct in accts){
+					if (acct.name === "Checking Account"){
+						$scope.transaction.accounts.from = acct.$id;
+					}
+				}
+			});
 			$scope.saveTransaction = function(){
 				if ($scope.transaction){
 					//TODO: validation framework
-					Transaction.all.$add($scope.transaction);
+					var dateToStore = new Date($scope.transaction.date);
+					Transaction.getAllByDate(dateToStore.getMonth(), dateToStore.getYear()).$add($scope.transaction);
 				}
 			};
 		}

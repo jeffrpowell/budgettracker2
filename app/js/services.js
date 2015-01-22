@@ -55,7 +55,9 @@ angular.module('budgetTracker.services', [])
 
 .factory('Transaction', ['fbutil', function(fbutil){
 	return {
-		"all": fbutil.syncArray('transaction', {}),
+		"getAllByDate": function(month, year){
+			fbutil.syncArray('transaction/'+month+'-'+year, {});
+		},
 		"load": function(tid, callback){
 			fbutil.syncObject('transaction/'+tid, {}).$loaded(callback);
 		},
