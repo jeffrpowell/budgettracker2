@@ -269,9 +269,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			today = yyyy+'-'+mm+'-'+dd;
 			$scope.transaction = {
 				'date': today, 
-				'accounts': {
-					'to':$routeParams.aid
-				},
+				'to_account': $routeParams.aid,
 				'amount': 0,
 				'projection': false, 
 				'memo': ''
@@ -279,8 +277,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			Account.bank.$loaded(function(accts){
 				$scope.bankAccounts = accts;
 				for (var acct in accts){
-					if (acct.name === "Checking Account"){
-						$scope.transaction.accounts.from = acct.$id;
+					var acctObj = accts[acct];
+					if (acctObj.name === "Checking Account"){
+						$scope.transaction.from_account = acctObj.$id;
 					}
 				}
 			});
@@ -288,7 +287,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				if ($scope.transaction){
 					//TODO: validation framework
 					var dateToStore = new Date($scope.transaction.date);
-					Transaction.getAllByDate(dateToStore.getMonth(), dateToStore.getYear()).$add($scope.transaction);
+					Transaction.getAllByDate(dateToStore.getMonth(), dateToStore.getFullYear()).$add($scope.transaction);
 				}
 			};
 		}
