@@ -34,9 +34,8 @@
       ".read": "auth.id !== null",
       ".write": "auth.id !== null",
       "$transaction_id": {
-        ".validate": "newData.hasChildren(['date', 'to_account', 'from_account', 'amount', 'projection', 'memo'])",
-        // dates in the format YYYY-MM-DD between the years 1900-2099
-        "date": {".validate": "newData.isString() && newData.val().matches(/^(19|20)[0-9][0-9][-\\/. ](0[1-9]|1[012])[-\\/. ](0[1-9]|[12][0-9]|3[01])$/)"},
+        ".validate": "newData.hasChildren(['timestamp', 'to_account', 'from_account', 'amount', 'projection', 'memo'])",
+        "timestamp": {".validate": "newData.isNumber()"},
         "to_account": {".validate": "root.child('account/'+newData.val()).exists()"},
         "from_account": {".validate": "root.child('account/'+newData.val()).exists()"},
         "amount": {".validate": "newData.isNumber()"},

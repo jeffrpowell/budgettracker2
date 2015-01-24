@@ -266,9 +266,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			if(mm<10) {
 				mm='0'+mm;
 			} 
-			today = yyyy+'-'+mm+'-'+dd;
+			//today = yyyy+'-'+mm+'-'+dd;
 			$scope.transaction = {
-				'date': today, 
+				'timestamp': today.getTime(), 
 				'to_account': $routeParams.aid,
 				'amount': 0,
 				'projection': false, 
@@ -286,8 +286,8 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			$scope.saveTransaction = function(){
 				if ($scope.transaction){
 					//TODO: validation framework
-					var dateToStore = new Date($scope.transaction.date);
-					Transaction.getAllByDate(dateToStore.getMonth(), dateToStore.getFullYear()).$add($scope.transaction);
+					Transaction.getAll().$add($scope.transaction);
+					$location.path('home');
 				}
 			};
 		}

@@ -55,11 +55,11 @@ angular.module('budgetTracker.services', [])
 
 .factory('Transaction', ['fbutil', function(fbutil){
 	return {
-		"getAllByDate": function(month, year){
-			fbutil.syncArray('transaction/'+month+'-'+year, {});
+		"getAll": function(){
+			return fbutil.syncArray('transaction/', {});
 		},
 		"load": function(tid, callback){
-			fbutil.syncObject('transaction/'+tid, {}).$loaded(callback);
+			return fbutil.syncObject('transaction/'+tid, {}).$loaded(callback);
 		},
 		"remove": function(tid){
 			var trans = fbutil.angularFireRef('transaction/', {});
