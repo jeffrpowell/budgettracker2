@@ -72,6 +72,15 @@ angular.module('budgetTracker.services', [])
 			return fbutil.angularFireFromRef(fbutil.ref('transaction').orderByChild('timestamp').startAt(startDateUnix).endAt(endDateUnix)).$asArray()
 		}
 	};
+}])
+
+.factory('FilterDate', ['fbutil', function(fbutil){
+	return {
+		date: new Date(),
+		syncdate: function(){
+			return fbutil.syncObject('filterDate', {});
+		}
+	};
 }]);
 /*
  * .factory('messageList', ['fbutil', function(fbutil) {

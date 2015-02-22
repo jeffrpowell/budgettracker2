@@ -7,11 +7,20 @@ angular.module('budgetTracker.config', ['mgcrea.ngStrap'])
   // instances with a lot of data-* attributes
   .config(function($datepickerProvider) {
 		angular.extend($datepickerProvider.defaults, {
-		startWeek: 0,
-		autoclose: true,
-		startDate: "today",
-		dateFormat: "mediumDate", //"MMM d, y"
-		dateType: "number"
+			//Since there are more month-selection datepicker instances, defaults go to support them
+			startWeek: 0,
+			autoclose: true,
+			startDate: "today",
+			dateType: "number",
+			dateFormat: "MMMM y",
+			minView: "1"
+			//For reference, here are the defaults expected for a regular date selection
+			//You'll need to manually specify these locally
+			/*
+			dateFormat: "mediumDate", //"MMM d, y"
+			dateType: "number", //unix timestamp
+			minView: "0",
+			 */
 	  });
   })
   

@@ -43,6 +43,11 @@
         "memo": {".validate": "newData.isString()"},
         "$other": { ".validate": false }
       }
+    },
+	"filterDate": {
+      ".read": "auth.id !== null",
+      ".write": "auth.id !== null",
+	  ".validate": "newData.isNumber()"
     }
   }
 }

@@ -56,7 +56,9 @@
                         <h3 class="panel-title">Select Date</h3>
                     </div>
                     <div class="panel-body text-center">
-                        <!--{% include "budget/month_selection.html" %}-->
+                        <button type="button" class="btn" ng-model="FilterDate.date" bs-datepicker>
+							{{FilterDate.date | date: 'MMMM y'}}
+						</button>
                     </div>
                 </div>
             </div>

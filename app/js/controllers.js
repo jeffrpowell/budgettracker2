@@ -36,8 +36,8 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
   }])
 
 .controller('HomeCtrl', 
-['$scope', 'Category', 'Account', 
-	function($scope, Category, Account) {
+['$scope', 'Category', 'Account', 'FilterDate',
+	function($scope, Category, Account, FilterDate) {
 		$scope.categories = {};
 		Category.bank.$loaded(function(banks){
 			$scope.categories.bank = banks;
@@ -96,6 +96,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				}
 			}
 		});
+		$scope.FilterDate = FilterDate;
 	}])
   
 .controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', 'ServiceUtils', '$location', 
@@ -217,11 +218,12 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 		};
 	}])
 
-.controller('AccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 
-	function($scope, $routeParams, Account, Category, $location){
+.controller('AccountCtrl',['$scope', '$routeParams', 'Account', 'Category', 'FilterDate', '$location', 
+	function($scope, $routeParams, Account, Category, FilterDate, $location){
 		$scope.account = Account.query($routeParams.aid);
 		Account.query($routeParams.aid).$bindTo($scope, 'account');
 		$scope.balance = 0;
+		$scope.FilterDate = FilterDate;
 		Account.load($routeParams.aid, function(acct){
 			Category.load(acct.category, function(cat){
 				$scope.category = cat;
