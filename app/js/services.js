@@ -56,7 +56,10 @@ angular.module('budgetTracker.services', [])
 .factory('Transaction', ['fbutil', function(fbutil){
 	return {
 		"getAll": function(){
-			return fbutil.syncArray('transaction/', {});
+			return fbutil.syncArray('transaction', {});
+		},
+		"addNewTransaction": function(trans){
+			fbutil.syncArray('transaction', {}).$add(trans);
 		},
 		"load": function(tid, callback){
 			return fbutil.syncObject('transaction/'+tid, {}).$loaded(callback);
@@ -64,6 +67,9 @@ angular.module('budgetTracker.services', [])
 		"remove": function(tid){
 			var trans = fbutil.angularFireRef('transaction/', {});
 			return trans.$remove(tid);
+		},
+		"getInRange": function(startDateUnix, endDateUnix){
+			return fbutil.angularFireFromRef(fbutil.ref('transaction').orderByChild('timestamp').startAt(startDateUnix).endAt(endDateUnix)).$asArray()
 		}
 	};
 }]);

@@ -12,6 +12,11 @@ angular.module('budgetTracker.services.utils', ['budgetTracker.services'])
 				},
 				deleteTransaction: function(tid){
 					removeTransaction(tid, true);
+				},
+				getTransactionsByMonthYear: function(dateObj){
+					var firstDay = new Date(dateObj.getFullYear(), dateObj.getMonth(), 1);
+					var lastDay = new Date(dateObj.getFullYear(), dateObj.getMonth() + 1, 0);
+					return Transaction.getInRange(firstDay.getTime(), lastDay.getTime());
 				}
 			};
 			

@@ -3,6 +3,7 @@
 // Declare app level module which depends on views, and components
 angular.module('budgetTracker', [
 	'budgetTracker.config',
+	'mgcrea.ngStrap',
 	'budgetTracker.controllers',
 	'budgetTracker.decorators',
 	'budgetTracker.directives',

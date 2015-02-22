@@ -255,20 +255,8 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			Account.load($routeParams.aid, function(acct){
 				$scope.account = acct;
 			});
-			//http://stackoverflow.com/questions/1531093/how-to-get-current-date-in-javascript/
-			var today = new Date();
-			var dd = today.getDate();
-			var mm = today.getMonth()+1; //January is 0!
-			var yyyy = today.getFullYear();
-			if(dd<10) {
-				dd='0'+dd;
-			} 
-			if(mm<10) {
-				mm='0'+mm;
-			} 
-			//today = yyyy+'-'+mm+'-'+dd;
 			$scope.transaction = {
-				'timestamp': today.getTime(), 
+				'timestamp': (new Date()).getTime(),
 				'to_account': $routeParams.aid,
 				'amount': 0,
 				'projection': false, 
@@ -286,7 +274,10 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			$scope.saveTransaction = function(){
 				if ($scope.transaction){
 					//TODO: validation framework
-					Transaction.getAll().$add($scope.transaction);
+					var dateTime = new Date($scope.transaction.timestamp);
+					//Flush out time data
+					$scope.transaction.timestamp = new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDay()).getTime();
+					Transaction.addNewTransaction($scope.transaction);
 					$location.path('home');
 				}
 			};
