@@ -11,7 +11,7 @@ angular.module('budgetTracker.config', ['mgcrea.ngStrap'])
 			startWeek: 0,
 			autoclose: true,
 			startDate: "today",
-			dateType: "number",
+			dateType: "date",
 			dateFormat: "MMMM y",
 			minView: "1"
 			//For reference, here are the defaults expected for a regular date selection

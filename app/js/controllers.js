@@ -247,9 +247,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 		});
 	}])
 		
-.controller('AddTransactionCtrl',['$scope', '$routeParams', 'Account', 'Transaction', '$location', 
+.controller('AddTransactionCtrl',['$scope', '$routeParams', 'Account', 'Transaction', 'FilterDate', '$location', 
 	
-	function($scope, $routeParams, Account, Transaction, $location){
+	function($scope, $routeParams, Account, Transaction, FilterDate, $location){
 		if (!$routeParams.aid){
 			$location.path('home');
 		}
@@ -257,8 +257,15 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			Account.load($routeParams.aid, function(acct){
 				$scope.account = acct;
 			});
+			var today = new Date();
+			var filterDate = FilterDate.date;
+			filterDate.setDate(1);
+			if (today.getFullYear() === filterDate.getFullYear() &&
+				today.getMonth() === filterDate.getMonth() ){
+				filterDate = today;
+			}
 			$scope.transaction = {
-				'timestamp': (new Date()).getTime(),
+				'timestamp': filterDate.getTime(),
 				'to_account': $routeParams.aid,
 				'amount': 0,
 				'projection': false, 
