@@ -34,10 +34,12 @@
       ".read": "auth.id !== null",
       ".write": "auth.id !== null",
       "$transaction_id": {
-        ".validate": "newData.hasChildren(['timestamp', 'to_account', 'from_account', 'amount', 'projection', 'memo'])",
+        ".validate": "newData.hasChildren(['timestamp', 'to_account', 'to_account_name', 'from_account', 'from_account_name', 'amount', 'projection', 'memo'])",
         "timestamp": {".validate": "newData.isNumber()"},
         "to_account": {".validate": "root.child('account/'+newData.val()).exists()"},
+        "to_account_name": {".validate": "newData.isString()"},
         "from_account": {".validate": "root.child('account/'+newData.val()).exists()"},
+        "from_account_name": {".validate": "newData.isString()"},
         "amount": {".validate": "newData.isNumber()"},
         "projection": {".validate": "newData.isBoolean()"},
         "memo": {".validate": "newData.isString()"},

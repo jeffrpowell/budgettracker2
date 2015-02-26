@@ -4,6 +4,8 @@
 
 angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'budgetTracker.services.utils'])
 
+//<editor-fold defaultstate="collapsed" desc="Auth">
+
 .controller('LoginCtrl', ['$scope', 'simpleLogin', '$location', function($scope, simpleLogin, $location) {
     $scope.email = null;
     $scope.pass = null;
@@ -34,7 +36,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
       return angular.isObject(err) && err.code? err.code : err + '';
     }
   }])
+//</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="Home">
 .controller('HomeCtrl', 
 ['$scope', 'Category', 'Account', 'FilterDate',
 	function($scope, Category, Account, FilterDate) {
@@ -98,7 +102,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 		});
 		$scope.FilterDate = FilterDate;
 	}])
-  
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="Category">
 .controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', 'ServiceUtils', '$location', 
 	function($scope, $routeParams, Category, ServiceUtils, $location){
 		if ($routeParams.type === "income" || $routeParams.type === "expense" || $routeParams.type === "bank"){
@@ -137,7 +143,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			ServiceUtils.deleteCategory($scope.cid);
 		};
 	}])
+//</editor-fold>
 
+//<editor-fold defaultstate="collapsed" desc="Account">
 .controller('AddAccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 
 	function($scope, $routeParams, Account, Category, $location){
 		//$routeParams.aid != null -> adding sub-account
@@ -218,12 +226,40 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 		};
 	}])
 
-.controller('AccountCtrl',['$scope', '$routeParams', 'Account', 'Category', 'FilterDate', '$location', 
-	function($scope, $routeParams, Account, Category, FilterDate, $location){
+.controller('AccountCtrl',['$scope', '$routeParams', 'Account', 'Category', 'FilterDate', 'ServiceUtils', 
+	function($scope, $routeParams, Account, Category, FilterDate, ServiceUtils){
 		$scope.account = Account.query($routeParams.aid);
 		Account.query($routeParams.aid).$bindTo($scope, 'account');
 		$scope.balance = 0;
 		$scope.FilterDate = FilterDate;
+		ServiceUtils.getTransactionsByMonthYear(FilterDate.date).$loaded(function(ref){
+			$scope.transactions = [];
+			for (var key in ref) {
+				var transaction = ref[key];
+				if (transaction.hasOwnProperty("$id")){
+					var accountId, accountName, deposit, withdrawal;
+					if (transaction.from_account === $routeParams.aid){
+						accountId = transaction.to_account;
+						accountName = transaction.to_account_name;
+						withdrawal = "$" + transaction.amount;
+					}
+					else{
+						accountId = transaction.from_account;
+						accountName = transaction.from_account_name;
+						deposit = "$" + transaction.amount;
+					}
+					$scope.transactions.push({
+						id: transaction.$id,
+						accountid: accountId,
+						date: transaction.timestamp,
+						account: accountName,
+						deposit: deposit,
+						withdrawal: withdrawal,
+						memo: transaction.memo
+					});
+				}
+			}
+		});
 		Account.load($routeParams.aid, function(acct){
 			Category.load(acct.category, function(cat){
 				$scope.category = cat;
@@ -246,7 +282,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			});
 		});
 	}])
-		
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed" desc="Transaction">
 .controller('AddTransactionCtrl',['$scope', '$routeParams', 'Account', 'Transaction', 'FilterDate', '$location', 
 	
 	function($scope, $routeParams, Account, Transaction, FilterDate, $location){
@@ -254,9 +292,6 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			$location.path('home');
 		}
 		else{
-			Account.load($routeParams.aid, function(acct){
-				$scope.account = acct;
-			});
 			var today = new Date();
 			var filterDate = FilterDate.date;
 			filterDate.setDate(1);
@@ -271,12 +306,17 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				'projection': false, 
 				'memo': ''
 			};
+			Account.load($routeParams.aid, function(acct){
+				$scope.account = acct;
+				$scope.transaction.to_account_name = acct.name;
+			});
 			Account.bank.$loaded(function(accts){
 				$scope.bankAccounts = accts;
 				for (var acct in accts){
 					var acctObj = accts[acct];
 					if (acctObj.name === "Checking Account"){
 						$scope.transaction.from_account = acctObj.$id;
+						$scope.transaction.from_account_name = acctObj.name;
 					}
 				}
 			});
@@ -292,3 +332,4 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			};
 		}
 	}]);
+//</editor-fold>
