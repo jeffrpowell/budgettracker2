@@ -245,11 +245,13 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 							accountId = transaction.to_account;
 							accountName = transaction.to_account_name;
 							withdrawal = "$" + transaction.amount;
+							deposit = "";
 							$scope.monthBalance -= transaction.amount;
 						}
 						else{
 							accountId = transaction.from_account;
 							accountName = transaction.from_account_name;
+							withdrawal = "";
 							deposit = "$" + transaction.amount;
 							$scope.monthBalance += transaction.amount;
 						}
@@ -299,6 +301,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			$location.path('home');
 		}
 		else{
+			
+			//Load up defaults
+			
 			var today = new Date();
 			var filterDate = FilterDate.date;
 			filterDate.setDate(1);
@@ -308,30 +313,67 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			}
 			$scope.transaction = {
 				'timestamp': filterDate.getTime(),
-				'to_account': $routeParams.aid,
 				'amount': 0,
 				'projection': false, 
 				'memo': ''
 			};
+			
+			//Determine if we display for an income or an expense account
+			
+			var expenseStrings = ['Purchase under', 'From', 'Charged'];
+			var incomeStrings = ['Deposit from', 'Deposit into', 'Deposited'];
 			Account.load($routeParams.aid, function(acct){
 				$scope.account = acct;
-				$scope.transaction.to_account_name = acct.name;
-			});
-			Account.bank.$loaded(function(accts){
-				$scope.bankAccounts = accts;
-				for (var acct in accts){
-					var acctObj = accts[acct];
-					if (acctObj.name === "Checking Account"){
+				if ($scope.account.category_type === 'income'){
+					$scope.outputStrings = incomeStrings;
+					$scope.selectedAcctIsToAcct = false;
+					$scope.transaction.from_account = $routeParams.aid;
+					$scope.transaction.from_account_name = acct.name;
+				}
+				else{
+					$scope.outputStrings = expenseStrings;
+					$scope.selectedAcctIsToAcct = true;
+					$scope.transaction.to_account = $routeParams.aid;
+					$scope.transaction.to_account_name = acct.name;
+				}
+				Account.bank.$loaded(function(accts){
+					$scope.bankAccounts = accts;
+					var acctObj = findBankAccountObj("Checking Account");
+					if ($scope.selectedAcctIsToAcct){
 						$scope.transaction.from_account = acctObj.$id;
 						$scope.transaction.from_account_name = acctObj.name;
 					}
-				}
+					else{
+						$scope.transaction.to_account = acctObj.$id;
+						$scope.transaction.to_account_name = acctObj.name;
+					}
+					$scope.targetAccount = acctObj.$id;
+				});
 			});
+			
+			var findBankAccountObj = function(idOrName){
+				for (var acct in $scope.bankAccounts){
+					var acctObj = $scope.bankAccounts[acct];
+					if (acctObj.name === idOrName || acctObj.$id === idOrName){
+						return acctObj;
+					}
+				}
+			}
+			
 			$scope.saveTransaction = function(){
 				if ($scope.transaction){
 					//TODO: validation framework
+					var acctObj = findBankAccountObj($scope.targetAccount);
+					if ($scope.selectedAcctIsToAcct){
+						$scope.transaction.from_account = $scope.targetAccount;
+						$scope.transaction.from_account_name = acctObj.name;
+					}
+					else{
+						$scope.transaction.to_account = $scope.targetAccount;
+						$scope.transaction.to_account_name = acctObj.name;
+					}
 					var dateTime = new Date($scope.transaction.timestamp);
-					//Flush out time data
+					//Flush out time bits
 					$scope.transaction.timestamp = new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDay()).getTime();
 					Transaction.addNewTransaction($scope.transaction);
 					$location.path('home');

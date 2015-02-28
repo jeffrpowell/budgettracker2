@@ -28,9 +28,9 @@ angular.module('budgetTracker.services', [])
 			fbutil.syncObject('account_category/'+cid, {}).$loaded(callback);
 		},
 		"all": fbutil.syncArray('account_category', {}),
-		"bank": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').startAt('bank').endAt('bank')).$asArray(),
-		"income": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').startAt('income').endAt('income')).$asArray(),
-		"expense": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').startAt('expense').endAt('expense')).$asArray()
+		"bank": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').equalTo('bank')).$asArray(),
+		"income": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').equalTo('income')).$asArray(),
+		"expense": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').equalTo('expense')).$asArray()
 	};
 }])
 
@@ -47,9 +47,9 @@ angular.module('budgetTracker.services', [])
 			var accts = fbutil.angularFireRef('account/', {});
 			return accts.$remove(aid);
 		},
-		"bank": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').startAt('bank').endAt('bank')).$asArray(),
-		"income": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').startAt('income').endAt('income')).$asArray(),
-		"expense": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').startAt('expense').endAt('expense')).$asArray()
+		"bank": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').equalTo('bank')).$asArray(),
+		"income": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').equalTo('income')).$asArray(),
+		"expense": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').equalTo('expense')).$asArray()
 	};
 }])
 
@@ -68,7 +68,7 @@ angular.module('budgetTracker.services', [])
 			var trans = fbutil.angularFireRef('transaction/', {});
 			return trans.$remove(tid);
 		},
-		"getInRange": function(startDateUnix, endDateUnix){
+		"getAllInRange": function(startDateUnix, endDateUnix){
 			return fbutil.angularFireFromRef(fbutil.ref('transaction').orderByChild('timestamp').startAt(startDateUnix).endAt(endDateUnix)).$asArray()
 		}
 	};
