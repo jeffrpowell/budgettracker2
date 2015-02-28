@@ -4,6 +4,7 @@
 angular.module('budgetTracker', [
 	'budgetTracker.config',
 	'mgcrea.ngStrap',
+	'xeditable',
 	'budgetTracker.controllers',
 	'budgetTracker.decorators',
 	'budgetTracker.directives',
@@ -14,4 +15,8 @@ angular.module('budgetTracker', [
 
 .run(['simpleLogin', function(simpleLogin) {
 	simpleLogin.getUser();
+}])
+
+.run(['editableOptions', function(editableOptions) {
+	editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 }]);

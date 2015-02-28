@@ -40,8 +40,8 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 
 //<editor-fold defaultstate="collapsed" desc="Home">
 .controller('HomeCtrl', 
-['$scope', 'Category', 'Account', 'FilterDate',
-	function($scope, Category, Account, FilterDate) {
+['$scope', 'Category', 'Account',
+	function($scope, Category, Account) {
 		$scope.categories = {};
 		Category.bank.$loaded(function(banks){
 			$scope.categories.bank = banks;
@@ -100,7 +100,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				}
 			}
 		});
-		$scope.FilterDate = FilterDate;
+		$scope.updateBackingTransactions = function(newDate){
+			console.log("TODO: update backing transactions for "+newDate);
+		};
 	}])
 //</editor-fold>
 
@@ -226,40 +228,42 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 		};
 	}])
 
-.controller('AccountCtrl',['$scope', '$routeParams', 'Account', 'Category', 'FilterDate', 'ServiceUtils', 
-	function($scope, $routeParams, Account, Category, FilterDate, ServiceUtils){
+.controller('AccountCtrl',['$scope', '$routeParams', 'Account', 'Category', 'ServiceUtils', 
+	function($scope, $routeParams, Account, Category, ServiceUtils){
 		$scope.account = Account.query($routeParams.aid);
 		Account.query($routeParams.aid).$bindTo($scope, 'account');
 		$scope.balance = 0;
-		$scope.FilterDate = FilterDate;
-		ServiceUtils.getTransactionsByMonthYear(FilterDate.date).$loaded(function(ref){
-			$scope.transactions = [];
-			for (var key in ref) {
-				var transaction = ref[key];
-				if (transaction.hasOwnProperty("$id")){
-					var accountId, accountName, deposit, withdrawal;
-					if (transaction.from_account === $routeParams.aid){
-						accountId = transaction.to_account;
-						accountName = transaction.to_account_name;
-						withdrawal = "$" + transaction.amount;
+		$scope.updateBackingTransactions = function(newDate){
+			ServiceUtils.getTransactionsByMonthYear(newDate).$loaded(function(ref){
+				$scope.transactions = [];
+				for (var key in ref) {
+					var transaction = ref[key];
+					if (transaction.hasOwnProperty("$id")){
+						var accountId, accountName, deposit, withdrawal;
+						if (transaction.from_account === $routeParams.aid){
+							accountId = transaction.to_account;
+							accountName = transaction.to_account_name;
+							withdrawal = "$" + transaction.amount;
+						}
+						else{
+							accountId = transaction.from_account;
+							accountName = transaction.from_account_name;
+							deposit = "$" + transaction.amount;
+						}
+						$scope.transactions.push({
+							id: transaction.$id,
+							accountid: accountId,
+							date: transaction.timestamp,
+							account: accountName,
+							deposit: deposit,
+							withdrawal: withdrawal,
+							memo: transaction.memo
+						});
 					}
-					else{
-						accountId = transaction.from_account;
-						accountName = transaction.from_account_name;
-						deposit = "$" + transaction.amount;
-					}
-					$scope.transactions.push({
-						id: transaction.$id,
-						accountid: accountId,
-						date: transaction.timestamp,
-						account: accountName,
-						deposit: deposit,
-						withdrawal: withdrawal,
-						memo: transaction.memo
-					});
 				}
-			}
-		});
+			});
+		};
+		
 		Account.load($routeParams.aid, function(acct){
 			Category.load(acct.category, function(cat){
 				$scope.category = cat;

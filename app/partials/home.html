@@ -51,16 +51,7 @@
         <br />
         <div class="row">
             <div class="col-xs-6 col-md-12">
-                <div class="panel">
-                    <div class="panel-heading default-bg">
-                        <h3 class="panel-title">Select Date</h3>
-                    </div>
-                    <div class="panel-body text-center">
-                        <button type="button" class="btn btn-default" ng-model="FilterDate.date" bs-datepicker>
-							{{FilterDate.date | date: 'MMMM y'}}
-						</button>
-                    </div>
-                </div>
+                <month-selection mode="Panel" on-date-selected="updateBackingTransactions(newDate)"></month-selection>
             </div>
             <div class="col-xs-6 col-md-12">
                 <div class="panel panel-info">
@@ -97,26 +88,24 @@
                 <div id="collapseOne" class="panel-collapse collapse in">
                     <table class="table">
 						<tr>
-							<th class="text-left" colspan="7"><a href="#/category/income">Add New Category</a></th>
+							<th class="text-left" colspan="6"><a href="#/category/income">Add New Category</a></th>
 						</tr>
-						<tr><th>Category</th><th class="text-center" colspan="2">Projected</th><th class="text-center" colspan="2">Actual</th><th class="text-center">Difference</th><th>Actions</th></tr>
-						<tr ng-repeat-start="cat in categories.income"><td colspan="6"><h4><a href="#/category/income/{{cat.$id}}">{{cat.name}}</a></h4></td>
+						<tr><th>Category</th><th class="text-center">Projected</th><th class="text-center" colspan="2">Actual</th><th class="text-center">Difference</th><th>Actions</th></tr>
+						<tr ng-repeat-start="cat in categories.income"><td colspan="5"><h4><a href="#/category/income/{{cat.$id}}">{{cat.name}}</a></h4></td>
 							<td><a href="#/account/add?cid={{cat.$id}}&type=income">Add Account</a></td>
 						</tr>
-						<!--{% for acct in category.accounts %}-->
 						<tr ng-repeat="acct in cat.accounts">
 							<td><a href="#/account/{{acct.$id}}">{{acct.name}}</a></td>
-							<td id="proj_{{acct.$id}}" class="no-right-border"><!--${{ acct.pred }}--></td>
+							<td id="proj_{{acct.$id}}" class="text-center"><a href="#" editable-text="acct.prediction">{{acct.prediction}}</a></td>
 							<!--<td id="proj_text_{{acct.acct.id}}" class="change-projection-text no-right-border">
 								$<input type="number" step="0.01" id="proj_input_{{ acct.acct.id }}" size="5"></td>-->
-							<td class="no-left-border text-right"><!--<a href="#" class="change-projection-link" id="link_{{ acct.acct.id }}">Edit</a>--></td>
 							<td class="no-right-border"><!--${{ acct.act }}--></td>
 							<td class="no-left-border text-right"><a href="#/transaction/add?aid={{acct.$id}}">Add</a></td>
 							<td id="diff_{{acct.$id}}"><!--${{ acct.diff }}--></td>
 							<td><a href="#/account/{{acct.$id}}/edit" class="account-edit-link">Edit Account</a><!-- / 
 								<a href="#/account/{{acct.$id}}/delete" class="account-delete-link">Delete Account</a>--></td>
 						</tr>
-						<tr ng-repeat-end><td colspan="7"></td></tr>
+						<tr ng-repeat-end><td colspan="6"></td></tr>
 					</table>
                 </div>
             </div>
@@ -140,7 +129,6 @@
 						<tr ng-repeat-start="cat in categories.expense"><td colspan="6"><h4><a href="#/category/expense/{{cat.$id}}">{{cat.name}}</a></h4></td>
 							<td><a href="#/account/add?cid={{cat.$id}}&type=expense">Add Account</a></td>
 						</tr>
-						<!--{% for acct in category.accounts %}-->
 						<tr ng-repeat="acct in cat.accounts">
 							<td><a href="#/account/{{acct.$id}}">{{acct.name}}</a></td>
 							<td id="proj_{{acct.$id}}" class="no-right-border"><!--${{ acct.pred }}--></td>
