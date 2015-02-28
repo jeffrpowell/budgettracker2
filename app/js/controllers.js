@@ -236,6 +236,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 		$scope.updateBackingTransactions = function(newDate){
 			ServiceUtils.getTransactionsByMonthYear(newDate).$loaded(function(ref){
 				$scope.transactions = [];
+				$scope.monthBalance = 0;
 				for (var key in ref) {
 					var transaction = ref[key];
 					if (transaction.hasOwnProperty("$id")){
@@ -244,11 +245,13 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 							accountId = transaction.to_account;
 							accountName = transaction.to_account_name;
 							withdrawal = "$" + transaction.amount;
+							$scope.monthBalance -= transaction.amount;
 						}
 						else{
 							accountId = transaction.from_account;
 							accountName = transaction.from_account_name;
 							deposit = "$" + transaction.amount;
+							$scope.monthBalance += transaction.amount;
 						}
 						$scope.transactions.push({
 							id: transaction.$id,

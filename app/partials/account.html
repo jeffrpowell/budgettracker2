@@ -34,9 +34,9 @@
 				<td><a href="#/transaction/{{t.id}}/edit">Edit</a></td>
 			</tr>
 		
-		<tr><td></td><td><strong>Monthly Balance:</strong></td><td>${{balance}}</td><td colspan="3"></td></tr>
-		<tr><td></td><td><strong>Overall Balance:</strong></td><td>$<input type="text" ng-model="account.balance" /></td>
-			<td><strong>Goal:</strong></td><td>$<input type="text" ng-model="account.goal" /></td><td></td></tr>
+		<tr><td></td><td><strong>Monthly Balance:</strong></td><td>${{monthBalance}}</td><td colspan="3"></td></tr>
+		<tr><td></td><td><strong>Overall Balance:</strong></td><td>${{account.balance}}</td>
+			<td><strong>Goal:</strong></td><td>${{account.goal}}</td><td></td></tr>
 		<tr><td colspan="6">{{originalCategory}}</td></tr>
 		</table>
 	</div>
@@ -68,7 +68,7 @@
 		<br />
 		<!--<div class="row">
 			<div class="col-xs-12">
-				<a href="{% url 'budget:deleteaccount' account.id %}" class="btn btn-danger">Delete Account</a>
+				<button class="btn btn-danger" ng-click="deleteAccount()">Delete Account</button>
 			</div>
 		</div>
 		<br />-->
