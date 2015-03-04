@@ -47,6 +47,9 @@ angular.module('budgetTracker.services', [])
 			var accts = fbutil.angularFireRef('account/', {});
 			return accts.$remove(aid);
 		},
+		"getAcctsInCategory": function(cid){
+			return fbutil.angularFireRef('account_category/'+cid+'/accounts', {}).$asArray();
+		},
 		"bank": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').equalTo('bank')).$asArray(),
 		"income": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').equalTo('income')).$asArray(),
 		"expense": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').equalTo('expense')).$asArray()
@@ -70,6 +73,12 @@ angular.module('budgetTracker.services', [])
 		},
 		"getAllInRange": function(startDateUnix, endDateUnix){
 			return fbutil.angularFireFromRef(fbutil.ref('transaction').orderByChild('timestamp').startAt(startDateUnix).endAt(endDateUnix)).$asArray()
+		},
+		"getForAccount": function(aid){
+			var transactions = {};
+			transactions['to'] = fbutil.angularFireFromRef(fbutil.ref('transaction').orderByChild('to_account').equalTo(aid)).$asArray();
+			transactions['from'] = fbutil.angularFireFromRef(fbutil.ref('transaction').orderByChild('from_account').equalTo(aid)).$asArray();
+			return transactions;
 		}
 	};
 }])

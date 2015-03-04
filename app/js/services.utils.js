@@ -13,15 +13,10 @@ angular.module('budgetTracker.services.utils', ['budgetTracker.services'])
 				deleteTransaction: function(tid){
 					removeTransaction(tid, true);
 				},
-				getTransactionsByMonthYear: function(dateObj, acct){
+				getTransactionsByMonthYear: function(dateObj){
 					var firstDay = new Date(dateObj.getFullYear(), dateObj.getMonth(), 1);
 					var lastDay = new Date(dateObj.getFullYear(), dateObj.getMonth() + 1, 0);
-					if (acct === undefined){
-						return Transaction.getAllInRange(firstDay.getTime(), lastDay.getTime());
-					}
-					else{
-						return Transaction.getAllInRange(firstDay.getTime(), lastDay.getTime());
-					}
+					return Transaction.getAllInRange(firstDay.getTime(), lastDay.getTime());
 				}
 			};
 			
@@ -32,14 +27,18 @@ angular.module('budgetTracker.services.utils', ['budgetTracker.services'])
 			function removeTransaction(tid, parentFunction){
 				var transPromise = Transaction.remove(tid);
 				if (parentFunction){
-					transPromise.then(returnHome());
+					transPromise.then(returnHome);
 				}
 			}
 			
 			function removeAccount(cid, aid, parentFunction){
-				/*
-				 * foreach transaction of account, removeTransaction(tid, false)
-				 */
+				var transOfAcct = Transaction.getForAccount(aid);
+				for(var key in transOfAcct){
+					var transObj = transOfAcct[key];
+					if (transObj.hasOwnProperty("$id")){
+						removeTransaction(transObj.$id, false);
+					}
+				}
 				
 				Category.removeAcct(cid, aid)
 				.then(function(ref){
@@ -51,9 +50,10 @@ angular.module('budgetTracker.services.utils', ['budgetTracker.services'])
 			}
 			
 			function removeCategory(cid){
-				/*
-				 * foreach account in category, removeAccount(cid, aid, false)
-				 */
+				var acctsInCat = Account.getAcctsInCategory(cid);
+				for(var acctId in acctsInCat){
+					removeAccount(acctId, false);
+				}
 				
 				Category.remove(cid).then(returnHome());
 			}

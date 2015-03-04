@@ -39,6 +39,12 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="Home">
+.controller('NavCtrl', ['$scope', '$location', function ($scope, $location){
+	$scope.goHome = function(){
+		$location.path('home');
+	};
+}])
+
 .controller('HomeCtrl', 
 ['$scope', 'Category', 'Account',
 	function($scope, Category, Account) {
@@ -234,7 +240,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 		Account.query($routeParams.aid).$bindTo($scope, 'account');
 		$scope.balance = 0;
 		$scope.updateBackingTransactions = function(newDate){
-			ServiceUtils.getTransactionsByMonthYear(newDate).$loaded(function(ref){
+			ServiceUtils.getTransactionsByMonthYear(newDate, $routeParams.aid).$loaded(function(ref){
 				$scope.transactions = [];
 				$scope.monthBalance = 0;
 				for (var key in ref) {
