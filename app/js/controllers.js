@@ -2,24 +2,26 @@
 
 /* Controllers */
 
-angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'budgetTracker.services.utils'])
+angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.services.utils'])
 
 //<editor-fold defaultstate="collapsed" desc="Auth">
 
-.controller('LoginCtrl', ['$scope', 'simpleLogin', '$location', function($scope, simpleLogin, $location) {
+.controller('LoginCtrl', ['$scope', 'Auth', '$location', function($scope, Auth, $location) {
     $scope.email = null;
     $scope.pass = null;
 
-    $scope.login = function(email, pass) {
-      $scope.err = null;
-	  if (assertValidAccountProps()){
-		simpleLogin.login(email, pass)
-		  .then(function(/* user */) {
-			$location.path('/home');
-		  }, function(err) {
-			$scope.err = errMessage(err);
-		  });
-	  }
+    $scope.login = function() {
+		$scope.err = null;
+		if (assertValidAccountProps()){
+			Auth.$authWithPassword({
+				email: $scope.email,
+				password: $scope.pass
+			}).then(function(authData) {
+				$location.path('home');
+			}).catch(function(error) {
+				$scope.err = "Authentication failed: " + error;
+			});
+		}
     };
 
     function assertValidAccountProps() {
@@ -49,7 +51,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 ['$scope', 'Category', 'Account',
 	function($scope, Category, Account) {
 		$scope.categories = {};
-		Category.bank.$loaded(function(banks){
+		Category.bank().$loaded(function(banks){
 			$scope.categories.bank = banks;
 			for (var cat in banks) {
 				if (banks.hasOwnProperty(cat) && banks[cat].accounts){
@@ -76,7 +78,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				}
 			}
 		});
-		Category.income.$loaded(function(incomes){
+		Category.income().$loaded(function(incomes){
 			$scope.categories.income = incomes;
 			for (var cat in incomes) {
 				if (incomes.hasOwnProperty(cat) && incomes[cat].accounts){
@@ -91,7 +93,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				}
 			}
 		});
-		Category.expense.$loaded(function(expenses){
+		Category.expense().$loaded(function(expenses){
 			$scope.categories.expense = expenses;
 			for (var cat in expenses) {
 				if (expenses.hasOwnProperty(cat) && expenses[cat].accounts){
@@ -138,7 +140,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			if ($scope.category){
 				//TODO: validation framework
 				if ($scope.add_mode){
-					Category.all.$add($scope.category);
+					Category.all().$add($scope.category);
 				}
 				else{
 					$scope.category.$save();
@@ -188,7 +190,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 			$scope.saveAccount = function(){
 				if ($scope.account){
 					//TODO: validation framework
-					Account.all.$add($scope.account).then(function(ref){
+					Account.all().$add($scope.account).then(function(ref){
 						Category.addAcct($routeParams.cid, ref.name()).then(function(innerRef){
 							$location.path('home');
 						});
@@ -281,7 +283,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 				if ($scope.category.type === 'bank' && (!$scope.account.hasOwnProperty("parent_account") || $scope.account.parent_account === '')){
 					$scope.canAddSub = true;
 					$scope.subaccounts = {};
-					Account.all.$loaded(function(ref){
+					Account.all().$loaded(function(ref){
 						for (var key in ref) {
 							var acct = ref[key];
 							if (acct.hasOwnProperty("parent_account") && acct.parent_account === $routeParams.aid){
@@ -342,7 +344,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'simpleLogin', 'b
 					$scope.transaction.to_account = $routeParams.aid;
 					$scope.transaction.to_account_name = acct.name;
 				}
-				Account.bank.$loaded(function(accts){
+				Account.bank().$loaded(function(accts){
 					$scope.bankAccounts = accts;
 					var acctObj = findBankAccountObj("Checking Account");
 					if ($scope.selectedAcctIsToAcct){

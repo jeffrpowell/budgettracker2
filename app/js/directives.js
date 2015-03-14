@@ -3,7 +3,7 @@
 /* Directives */
 
 
-angular.module('budgetTracker.directives', ['simpleLogin'])
+angular.module('budgetTracker.directives', [])
 
   .directive('appVersion', ['version', function(version) {
     return function(scope, elm) {
@@ -14,10 +14,10 @@ angular.module('budgetTracker.directives', ['simpleLogin'])
   /**
    * A directive that shows elements only when user is logged in.
    */
-  .directive('ngShowAuth', ['simpleLogin', '$timeout', function (simpleLogin, $timeout) {
+  .directive('ngShowAuth', ['Auth', '$timeout', function (Auth, $timeout) {
     var isLoggedIn;
-    simpleLogin.watch(function(user) {
-      isLoggedIn = !!user;
+    Auth.$onAuth(function(authData) {
+      isLoggedIn = !!authData;
     });
 
     return {
@@ -34,7 +34,7 @@ angular.module('budgetTracker.directives', ['simpleLogin'])
         }
 
         update();
-        simpleLogin.watch(update, scope);
+        Auth.$onAuth(update, scope);
       }
     };
   }])
@@ -42,10 +42,10 @@ angular.module('budgetTracker.directives', ['simpleLogin'])
   /**
    * A directive that shows elements only when user is logged out.
    */
-  .directive('ngHideAuth', ['simpleLogin', '$timeout', function (simpleLogin, $timeout) {
+  .directive('ngHideAuth', ['Auth', '$timeout', function (Auth, $timeout) {
     var isLoggedIn;
-    simpleLogin.watch(function(user) {
-      isLoggedIn = !!user;
+    Auth.$onAuth(function(authData) {
+      isLoggedIn = !!authData;
     });
 
     return {
@@ -62,7 +62,7 @@ angular.module('budgetTracker.directives', ['simpleLogin'])
         }
 
         update();
-        simpleLogin.watch(update, scope);
+        Auth.$onAuth(update, scope);
       }
     };
   }])

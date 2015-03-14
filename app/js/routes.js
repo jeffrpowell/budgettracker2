@@ -1,23 +1,11 @@
 "use strict";
 
-angular.module('budgetTracker.routes', ['ngRoute', 'simpleLogin'])
+angular.module('budgetTracker.routes', ['ngRoute'])
 
   .constant('ROUTES', {
     '/home': {
       templateUrl: 'partials/home.html',
       controller: 'HomeCtrl',
-      resolve: {
-        // forces the page to wait for this promise to resolve before controller is loaded
-        // the controller can then inject `user` as a dependency. This could also be done
-        // in the controller, but this makes things cleaner (controller doesn't need to worry
-        // about auth status or timing of displaying its UI components)
-        user: ['simpleLogin', function(simpleLogin) {
-          return simpleLogin.getUser();
-        }]
-      },
-      // require user to be logged in to view this route
-      // the whenAuthenticated method below will resolve the current user
-      // before this controller loads and redirect if necessary
 	  authRequired: true
     },
     '/login': {
@@ -53,7 +41,7 @@ angular.module('budgetTracker.routes', ['ngRoute', 'simpleLogin'])
 
   /**
    * Adds a special `whenAuthenticated` method onto $routeProvider. This special method,
-   * when called, invokes the requireUser() service (see simpleLogin.js).
+   * when called, invokes the $firebaseAuth.$requireAuth() service.
    *
    * The promise either resolves to the authenticated user object and makes it available to
    * dependency injection (see AuthCtrl), or rejects the promise if user is not logged in,
@@ -65,11 +53,14 @@ angular.module('budgetTracker.routes', ['ngRoute', 'simpleLogin'])
     // the .config calls resolve, so they can't be used during route configuration, so we have
     // to hack it directly onto the $routeProvider object
     $routeProvider.whenAuthenticated = function(path, route) {
-      route.resolve = route.resolve || {};
-      route.resolve.user = ['requireUser', function(requireUser) {
-        return requireUser();
-      }];
-      $routeProvider.when(path, route);
+		route.resolve = route.resolve || {};
+		// controller will not be loaded until $requireAuth resolves
+		route.resolve.user = ["Auth", function(Auth) {
+			// $requireAuth returns a promise so the resolve waits for it to complete
+			// If the promise is rejected, it will throw a $stateChangeError
+			return Auth.$requireAuth();
+		}];
+		$routeProvider.when(path, route);
     };
   }])
 
@@ -98,15 +89,15 @@ angular.module('budgetTracker.routes', ['ngRoute', 'simpleLogin'])
    * for changes in auth status which might require us to navigate away from a path
    * that we can no longer view.
    */
-  .run(['$rootScope', '$location', 'simpleLogin', 'ROUTES', 'loginRedirectPath',
-    function($rootScope, $location, simpleLogin, ROUTES, loginRedirectPath) {
+  .run(['$rootScope', '$location', 'Auth', 'ROUTES', 'loginRedirectPath',
+    function($rootScope, $location, Auth, ROUTES, loginRedirectPath) {
       // watch for login status changes and redirect if appropriate
-      simpleLogin.watch(check, $rootScope);
+      Auth.$onAuth(check, $rootScope);
 
       // some of our routes may reject resolve promises with the special {authRequired: true} error
       // this redirects to the login page whenever that is encountered
-      $rootScope.$on("$routeChangeError", function(e, next, prev, err) {
-        if( angular.isObject(err) && err.authRequired ) {
+      $rootScope.$on("$routeChangeError", function(event, next, previous, error) {
+        if(error === "AUTH_REQUIRED") {
           $location.path(loginRedirectPath);
         }
       });

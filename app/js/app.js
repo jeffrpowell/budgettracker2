@@ -13,9 +13,9 @@ angular.module('budgetTracker', [
 	'budgetTracker.services'
 ])
 
-.run(['simpleLogin', function(simpleLogin) {
+/*.run(['simpleLogin', function(simpleLogin) {
 	simpleLogin.getUser();
-}])
+}])*/
 
 .run(['editableOptions', function(editableOptions) {
 	editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'

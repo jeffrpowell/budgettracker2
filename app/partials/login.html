@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-xs-3">
-		<form role="form">
+		<form role="form" ng-submit="login()" >
 			<div class="form-group">
 				<label for="email">Email address</label>
 				<input type="email" ng-model="email" class="form-control" id="email" placeholder="Enter email">
@@ -9,7 +9,7 @@
 				<label for="password">Password</label>
 				<input type="password" ng-model="pass" class="form-control" id="password" placeholder="Password">
 			</div>
-			<button ng-click="login(email, pass)" >Log In</button>
+			<input type="submit" value="Login" />
 			<p ng-show="err" class="error">{{err}}</p>
 		</form>
 	</div>

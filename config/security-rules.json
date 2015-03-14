@@ -3,8 +3,8 @@
     ".read": false,
     ".write": false,
     "account_category": {
-      ".read": "auth.id !== null",
-      ".write": "auth.id !== null",
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null",
       "$account_category_id": {
         ".validate": "newData.hasChildren()",
         "name": {".validate": "newData.isString() && newData.val().length > 0"},
@@ -16,8 +16,8 @@
       }
     },
     "account": {
-      ".read": "auth.id !== null",
-      ".write": "auth.id !== null",
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null",
       "$account_id": {
 		".validate": "newData.hasChildren(['name', 'balance', 'category', 'category_type', 'goal_account'])",
         "category": {".validate": "root.child('account_category/'+newData.val()).exists()"},
@@ -31,8 +31,8 @@
       }
     },
     "transaction": {
-      ".read": "auth.id !== null",
-      ".write": "auth.id !== null",
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null",
       "$transaction_id": {
         ".validate": "newData.hasChildren(['timestamp', 'to_account', 'to_account_name', 'from_account', 'from_account_name', 'amount', 'projection', 'memo'])",
         "timestamp": {".validate": "newData.isNumber()"},
@@ -47,8 +47,8 @@
       }
     },
 	"filterDate": {
-      ".read": "auth.id !== null",
-      ".write": "auth.id !== null",
+      ".read": "auth.uid !== null",
+      ".write": "auth.uid !== null",
 	  ".validate": "newData.isNumber()"
     }
   }

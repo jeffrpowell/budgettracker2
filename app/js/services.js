@@ -4,80 +4,103 @@
 
 angular.module('budgetTracker.services', [])
 
+.factory('Auth', ['fbutil', '$firebaseAuth', function(fbutil, $firebaseAuth){
+	return $firebaseAuth(fbutil.ref());	
+}])
+
 .factory('Category', ['fbutil', function(fbutil){
 	return {
 		"customArr": function(path){
-			return fbutil.syncArray('account_category/'+path, {});
+			return fbutil.firebaseArray('account_category/'+path);
 		},
 		"customObj": function(path){
-			return fbutil.syncObject('account_category/'+path, {});
+			return fbutil.firebaseObject('account_category/'+path);
 		},
 		"addAcct": function(cid, aid){
-			var arr = fbutil.angularFireRef('account_category/'+cid+'/accounts', {});
+			var arr = fbutil.firebaseArray('account_category/'+cid+'/accounts');
 			return arr.$set(aid, aid);
 		},
 		"removeAcct": function(cid, aid){
-			var accts = fbutil.angularFireRef('account_category/'+cid+'/accounts', {});
+			var accts = fbutil.firebaseArray('account_category/'+cid+'/accounts');
 			return accts.$remove(aid);
 		},
 		"remove": function(cid){
-			var cats = fbutil.angularFireRef('account_category/', {});
+			var cats = fbutil.firebaseArray('account_category/');
 			return cats.$remove(cid);
 		},
 		"load": function(cid, callback){
-			fbutil.syncObject('account_category/'+cid, {}).$loaded(callback);
+			fbutil.firebaseObject('account_category/'+cid).$loaded(callback);
 		},
-		"all": fbutil.syncArray('account_category', {}),
-		"bank": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').equalTo('bank')).$asArray(),
-		"income": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').equalTo('income')).$asArray(),
-		"expense": fbutil.angularFireFromRef(fbutil.ref('account_category').orderByChild('type').equalTo('expense')).$asArray()
+		"all": fbutil.firebaseArray('account_category'),
+		"bank": function(){
+			var ref = fbutil.ref('account_category').orderByChild('type').equalTo('bank');
+			return fbutil.arrayFromRef(ref);
+		},
+		"income": function(){
+			var ref = fbutil.ref('account_category').orderByChild('type').equalTo('income');
+			return fbutil.arrayFromRef(ref);
+		},
+		"expense": function(){
+			var ref = fbutil.ref('account_category').orderByChild('type').equalTo('expense');
+			return fbutil.arrayFromRef(ref);
+		}
 	};
 }])
 
 .factory('Account', ['fbutil', function(fbutil){
 	return {
-		"all": fbutil.syncArray('account', {}),
+		"all": fbutil.firebaseArray('account'),
 		"query": function(aid){
-			return fbutil.syncObject('account/'+aid, {});
+			return fbutil.firebaseObject('account/'+aid);
 		},
 		"load": function(aid, callback){
-			fbutil.syncObject('account/'+aid, {}).$loaded(callback);
+			fbutil.firebaseObject('account/'+aid).$loaded(callback);
 		},
 		"remove": function(aid){
-			var accts = fbutil.angularFireRef('account/', {});
+			var accts = fbutil.firebaseArray('account/');
 			return accts.$remove(aid);
 		},
 		"getAcctsInCategory": function(cid){
-			return fbutil.angularFireRef('account_category/'+cid+'/accounts', {}).$asArray();
+			return fbutil.firebaseArray('account_category/'+cid+'/accounts');
 		},
-		"bank": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').equalTo('bank')).$asArray(),
-		"income": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').equalTo('income')).$asArray(),
-		"expense": fbutil.angularFireFromRef(fbutil.ref('account').orderByChild('category_type').equalTo('expense')).$asArray()
+		"bank": function(){
+			var ref = fbutil.ref('account').orderByChild('category_type').equalTo('bank');
+			return fbutil.arrayFromRef(ref);
+		},
+		"income": function(){
+			var ref = fbutil.ref('account').orderByChild('category_type').equalTo('income');
+			return fbutil.arrayFromRef(ref);
+		},
+		"expense": function(){
+			var ref = fbutil.ref('account').orderByChild('category_type').equalTo('expense');
+			return fbutil.arrayFromRef(ref);
+		}
 	};
 }])
 
 .factory('Transaction', ['fbutil', function(fbutil){
 	return {
 		"getAll": function(){
-			return fbutil.syncArray('transaction', {});
+			return fbutil.firebaseArray('transaction');
 		},
 		"addNewTransaction": function(trans){
-			fbutil.syncArray('transaction', {}).$add(trans);
+			fbutil.firebaseArray('transaction').$add(trans);
 		},
 		"load": function(tid, callback){
-			return fbutil.syncObject('transaction/'+tid, {}).$loaded(callback);
+			return fbutil.firebaseObject('transaction/'+tid).$loaded(callback);
 		},
 		"remove": function(tid){
-			var trans = fbutil.angularFireRef('transaction/', {});
+			var trans = fbutil.firebaseArray('transaction/');
 			return trans.$remove(tid);
 		},
 		"getAllInRange": function(startDateUnix, endDateUnix){
-			return fbutil.angularFireFromRef(fbutil.ref('transaction').orderByChild('timestamp').startAt(startDateUnix).endAt(endDateUnix)).$asArray()
+			var ref = fbutil.ref('transaction').orderByChild('timestamp').startAt(startDateUnix).endAt(endDateUnix);
+			return fbutil.arrayFromRef(ref);
 		},
 		"getForAccount": function(aid){
 			var transactions = {};
-			transactions['to'] = fbutil.angularFireFromRef(fbutil.ref('transaction').orderByChild('to_account').equalTo(aid)).$asArray();
-			transactions['from'] = fbutil.angularFireFromRef(fbutil.ref('transaction').orderByChild('from_account').equalTo(aid)).$asArray();
+			transactions['to'] = fbutil.arrayFromRef(fbutil.ref('transaction').orderByChild('to_account').equalTo(aid));
+			transactions['from'] = fbutil.arrayFromRef(fbutil.ref('transaction').orderByChild('from_account').equalTo(aid));
 			return transactions;
 		}
 	};
