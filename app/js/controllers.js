@@ -11,16 +11,23 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
     $scope.pass = null;
 
     $scope.login = function() {
+		var $submitBtn = jQuery('#loginSubmit')
+		$submitBtn.button('loading');
 		$scope.err = null;
 		if (assertValidAccountProps()){
 			Auth.$authWithPassword({
 				email: $scope.email,
 				password: $scope.pass
 			}).then(function(authData) {
+				$submitBtn.button('reset');
 				$location.path('home');
 			}).catch(function(error) {
+				$submitBtn.button('reset');
 				$scope.err = "Authentication failed: " + error;
 			});
+		}
+		else{
+			$submitBtn.button('reset');
 		}
     };
 
@@ -41,9 +48,17 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="Home">
-.controller('NavCtrl', ['$scope', '$location', function ($scope, $location){
+.controller('NavCtrl', ['$scope', '$location', 'Auth', function ($scope, $location, Auth){
 	$scope.goHome = function(){
 		$location.path('home');
+	};
+	$scope.authData = Auth.$getAuth();
+	Auth.$onAuth(function(authData){
+		$scope.authData = !!authData;
+	});
+	$scope.logout = function(){
+		$location.path('login');
+		Auth.$unauth();
 	};
 }])
 

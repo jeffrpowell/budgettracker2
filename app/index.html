@@ -23,11 +23,11 @@
 		<script src="//cdn.firebase.com/js/simple-login/1.6.x/firebase-simple-login.js"></script>
 		<script src="//cdn.firebase.com/libs/angularfire/0.8.x/angularfire.min.js"></script>
 		-->
-		<script src="bower_components/angular/angular.min.js"></script>
+		<script src="bower_components/angular/angular.js"></script>
 		<script src="bower_components/angular-route/angular-route.min.js"></script>
 		<script src="bower_components/angular-resource/angular-resource.min.js"></script>
-		<script src="bower_components/firebase/firebase.js"></script>
-		<script src="bower_components/angularfire/dist/angularfire.min.js"></script>
+		<script src="bower_components/firebase/firebase-debug.js"></script>
+		<script src="bower_components/angularfire/dist/angularfire.js"></script>
 		<script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
 		<script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
 		<script src="bower_components/angular-xeditable/dist/js/xeditable.min.js"></script>
@@ -47,13 +47,21 @@
 
 			<nav class="navbar navbar-default navbar-inverse" ng-controller="NavCtrl" role="navigation">
 				<div class="navbar-header">
-                    <a class="navbar-brand" ng-click="goHome()">Budget Tracker</a>
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarCollapse">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+                    <button class="navbar-brand btn btn-link" ng-click="goHome()">Budget Tracker</button>
 				</div>
-				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<div class="collapse navbar-collapse" id="navbarCollapse">
 					<ul class="nav navbar-nav">
 						<!-- BREADCRUMBS HERE -->
 					</ul>
-
+					<ul class="nav navbar-nav navbar-right">
+						<li><button class="btn btn-link navbar-btn" ng-show="authData" ng-click="logout()">Logout</button></li>
+					</ul>
 				</div><!-- /.navbar-collapse -->
 			</nav>
 

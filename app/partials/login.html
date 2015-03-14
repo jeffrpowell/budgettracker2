@@ -9,7 +9,7 @@
 				<label for="password">Password</label>
 				<input type="password" ng-model="pass" class="form-control" id="password" placeholder="Password">
 			</div>
-			<input type="submit" value="Login" />
+			<button id="loginSubmit" type="submit" data-loading-text="Please wait..." class="btn btn-primary">Login</button>
 			<p ng-show="err" class="error">{{err}}</p>
 		</form>
 	</div>
