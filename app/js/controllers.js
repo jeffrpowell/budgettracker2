@@ -63,8 +63,8 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 }])
 
 .controller('HomeCtrl', 
-['$scope', 'Category', 'Account',
-	function($scope, Category, Account) {
+['$scope', 'Category', 'ModelInstances',
+	function($scope, Category, ModelInstances) {
 		$scope.categories = {};
 		Category.bank().$loaded(function(banks){
 			$scope.categories.bank = banks;
@@ -74,7 +74,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 					$scope.bankcatid = $scope.categories.bank[cat].$id;
 					for (var acct in banks[cat].accounts){
 						if (banks[cat].accounts.hasOwnProperty(acct)){
-							Account.load(acct, function(loadedAcct){
+							ModelInstances.getAccount(acct).$loaded(function(loadedAcct){
 								if (!loadedAcct.hasOwnProperty("parent_account")){
 									//The '0' index here is a hack because we're only
 									//expecting 1 bank category in the app. The reason
@@ -102,7 +102,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 							/*Account.load(acct, function(loadedAcct){
 								$scope.categories.income.cat.accounts.acct = loadedAcct;
 							});*/
-							$scope.categories.income[cat].accounts[acct] = Account.query(acct);
+							$scope.categories.income[cat].accounts[acct] = ModelInstances.getAccount(acct);
 						}
 					}
 				}
@@ -117,7 +117,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 							/*Account.load(acct, function(loadedAcct){
 								$scope.categories.income.cat.accounts.acct = loadedAcct;
 							});*/
-							$scope.categories.expense[cat].accounts[acct] = Account.query(acct);
+							$scope.categories.expense[cat].accounts[acct] = ModelInstances.getAccount(acct);
 						}
 					}
 				}
@@ -130,8 +130,8 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="Category">
-.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'Category', 'ServiceUtils', '$location', 
-	function($scope, $routeParams, Category, ServiceUtils, $location){
+.controller('CategoryDetailCtrl',['$scope', '$routeParams', 'ModelInstances', 'ServiceUtils', '$location', 
+	function($scope, $routeParams, ModelInstances, ServiceUtils, $location){
 		if ($routeParams.type === "income" || $routeParams.type === "expense" || $routeParams.type === "bank"){
 			if ($routeParams.cid === null || !$routeParams.cid){
 				$scope.category = {
@@ -141,8 +141,8 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 				$scope.category.type = $routeParams.type;
 			}
 			else{
-				$scope.category = Category.customObj($routeParams.cid);
-				Category.customObj($routeParams.cid).$bindTo($scope, 'category');
+				$scope.category = ModelInstances.getCategory($routeParams.cid);
+				ModelInstances.getCategory($routeParams.cid).$bindTo($scope, 'category');
 				$scope.add_mode = false;
 				$scope.cid = $routeParams.cid;
 			}
@@ -155,7 +155,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 			if ($scope.category){
 				//TODO: validation framework
 				if ($scope.add_mode){
-					Category.all().$add($scope.category);
+					ModelInstances.categoryList.$add($scope.category);
 				}
 				else{
 					$scope.category.$save();
@@ -171,14 +171,14 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="Account">
-.controller('AddAccountCtrl',['$scope', '$routeParams', 'Account', 'Category', '$location', 
-	function($scope, $routeParams, Account, Category, $location){
+.controller('AddAccountCtrl',['$scope', '$routeParams', 'Account', 'ModelInstances', '$location', 
+	function($scope, $routeParams, Account, ModelInstances, $location){
 		//$routeParams.aid != null -> adding sub-account
 		if (!$routeParams.cid){
 			$location.path('home');
 		}
 		else{
-			Category.load($routeParams.cid, function(cat){
+			ModelInstances.getCategory($routeParams.cid).$loaded(function(cat){
 				$scope.category = {
 					"$id": $routeParams.cid,
 					"name": cat.name
@@ -205,10 +205,13 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 			$scope.saveAccount = function(){
 				if ($scope.account){
 					//TODO: validation framework
-					Account.all().$add($scope.account).then(function(ref){
-						Category.addAcct($routeParams.cid, ref.name()).then(function(innerRef){
+					/*ModelInstances.accountList.$add($scope.account).then(function(ref){
+						ModelInstances.getCategory($routeParams.cid).$addAccount(ref.key()).then(function(innerRef){
 							$location.path('home');
 						});
+					});*/
+					ModelInstances.accountList.$add($scope.account).then(function(ref){
+						$location.path('home');
 					});
 				}
 			};
@@ -318,9 +321,9 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 //</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="Transaction">
-.controller('AddTransactionCtrl',['$scope', '$routeParams', 'Account', 'Transaction', 'FilterDate', '$location', 
+.controller('AddTransactionCtrl',['$scope', '$routeParams', 'ModelInstances', 'Account', 'FilterDate', '$location', 
 	
-	function($scope, $routeParams, Account, Transaction, FilterDate, $location){
+	function($scope, $routeParams, ModelInstances, Account, FilterDate, $location){
 		if (!$routeParams.aid){
 			$location.path('home');
 		}
@@ -346,7 +349,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 			
 			var expenseStrings = ['Purchase under', 'From', 'Charged'];
 			var incomeStrings = ['Deposit from', 'Deposit into', 'Deposited'];
-			Account.load($routeParams.aid, function(acct){
+			ModelInstances.getAccount($routeParams.aid).$loaded(function(acct){
 				$scope.account = acct;
 				if ($scope.account.category_type === 'income'){
 					$scope.outputStrings = incomeStrings;
@@ -399,7 +402,7 @@ angular.module('budgetTracker.controllers', ['firebase.utils', 'budgetTracker.se
 					var dateTime = new Date($scope.transaction.timestamp);
 					//Flush out time bits
 					$scope.transaction.timestamp = new Date(dateTime.getFullYear(), dateTime.getMonth(), dateTime.getDay()).getTime();
-					Transaction.addNewTransaction($scope.transaction);
+					ModelInstances.transactionList.$add($scope.transaction);
 					$location.path('home');
 				}
 			};

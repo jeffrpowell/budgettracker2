@@ -8,8 +8,8 @@ angular.module('budgetTracker.services', [])
 		return $firebaseAuth(fbutil.ref());
 	}])
 
-.factory("CategoryObject", ['$firebaseObject', 'fbutil', 'CATEGORY_URL', 'AccountObject',
-	function ($firebaseObject, fbutil, CATEGORY_URL, AccountObject) {
+.factory("CategoryObject", ['$firebaseObject', 'fbutil', 'CATEGORY_URL', 'ServiceUtils', 'AccountList',
+	function ($firebaseObject, fbutil, CATEGORY_URL, ServiceUtils, AccountList) {
 		function getAccountList(cid) {
 			return new AccountList(fbutil.ref(CATEGORY_URL + '/' + cid + "/accounts"));
 		}
@@ -18,21 +18,25 @@ angular.module('budgetTracker.services', [])
 			$getAccounts: function () {
 				return getAccountList(this.$id);
 			},
+			$addAccount: function (aid) {
+				var acctList = getAccountList(this.$id);
+				acctList[aid] = aid;
+				return acctList.$save(aid);
+			},
+			$removeAccount: function (aid) {
+				return getAccountList(this.$id).$remove(aid);
+			},
 			$delete: function () {
-				var accountList = getAccountList(this.$id);
-				angular.forEach(accountList, function (value, key) {
-					var acct = new AccountObject(fbutil.accountRef(key));
-					acct.$delete();
-				});
+				ServiceUtils.deleteAccounts(this.$id, getAccountList(this.$id));
 				this.$remove();
 			}
 		});
 	}])
 
-.factory("AccountObject", ['$firebaseObject', 'fbutil', 
-	function ($firebaseObject, fbutil) {
+.factory("AccountObject", ['$firebaseObject', 'fbutil', 'CategoryObject',
+	function ($firebaseObject, fbutil, CategoryObject) {
 		function getTransactionList() {
-
+			return null;
 		}
 
 		return $firebaseObject.$extend({
@@ -89,6 +93,11 @@ angular.module('budgetTracker.services', [])
 		return $firebaseArray.$extend({
 			$getAccount: function (aid) {
 				return new AccountObject(fbutil.accountRef(aid));
+			},
+			$$added: function(snap) {
+				var acct = new AccountObject(snap.ref());
+				acct.$getCategory().$addAccount(acct.$id);
+				return acct;
 			}
 		});
 	}])
@@ -102,8 +111,8 @@ angular.module('budgetTracker.services', [])
 		});
 	}])
 
-.factory("ModelInstances", ['fbutil', 'CategoryList', 'AccountList', 'TransactionList',
-	function (fbutil, CategoryList, AccountList, TransactionList) {
+.factory("ModelInstances", ['fbutil', 'CategoryList', 'AccountList', 'TransactionList', 'CategoryObject', 'AccountObject', 'TransactionObject',
+	function (fbutil, CategoryList, AccountList, TransactionList, CategoryObject, AccountObject, TransactionObject) {
 		return {
 			categoryList: new CategoryList(fbutil.categoryListRef),
 			accountList: new AccountList(fbutil.accountListRef),
@@ -115,7 +124,7 @@ angular.module('budgetTracker.services', [])
 				return new AccountObject(fbutil.accountRef(aid));
 			},
 			getTransaction: function(tid){
-				new TransactionObject(fbutil.transactionRef(tid));
+				return new TransactionObject(fbutil.transactionRef(tid));
 			}
 		};
 	}])

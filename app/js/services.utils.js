@@ -10,6 +10,11 @@ angular.module('budgetTracker.services.utils', ['budgetTracker.services'])
 			deleteAccount: function (cid, aid) {
 				removeAccount(cid, aid, true);
 			},
+			deleteAccounts: function (cid, accountList) {
+				angular.forEach(accountList, function (value, key) {
+					removeAccount(cid, key, false);
+				});
+			},
 			deleteTransaction: function (tid) {
 				removeTransaction(tid, true);
 			},
