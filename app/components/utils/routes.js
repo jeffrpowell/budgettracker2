@@ -4,12 +4,12 @@ angular.module('budgetTracker.routes', ['ngRoute'])
 
   .constant('ROUTES', {
     '/home': {
-      templateUrl: 'partials/home.html',
+      templateUrl: 'components/home/home.html',
       controller: 'HomeCtrl',
 	  authRequired: true
     },
     '/login': {
-      templateUrl: 'partials/login.html',
+      templateUrl: 'components/login/login.html',
       controller: 'LoginCtrl'
     },
 	'/category/:type/:cid?': {

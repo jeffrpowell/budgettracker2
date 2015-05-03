@@ -5,18 +5,18 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "angular": "1.x.x",
-    "jquery": "~2.x.x",
-    "bootstrap": "~3.x.x",
-    "angular-route": "~1.x.x",
-    "angular-resource": "~1.x.x",
-    "angular-loader": "1.x.x",
-    "angular-mocks": "~1.x.x",
-    "firebase": "2.x.x",
-    "angularfire": "1.x.x",
-    "mockfirebase": "0.x.x",
-    "html5-boilerplate": "~4.x.0",
-    "angular-strap": "2.x.x",
-	"angular-xeditable": "0.x.x"
+    "angular": "^1.x.x",
+    "jquery": "^2.x.x",
+    "bootstrap": "^3.x.x",
+    "angular-route": "^1.x.x",
+    "angular-resource": "^1.x.x",
+    "angular-loader": "^1.x.x",
+    "angular-mocks": "^1.x.x",
+    "firebase": "^2.x.x",
+    "angularfire": "^1.x.x",
+    "mockfirebase": "^0.x.x",
+    "html5-boilerplate": "^4.x.0",
+    "angular-strap": "^2.x.x",
+	"angular-xeditable": "^0.x.x"
   }
 }
