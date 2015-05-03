@@ -6,7 +6,7 @@ angular.module('budgetTracker.utils.monthSelection', ['budgetTracker.services'])
 			restrict: 'E',
 			replace: true,
 			templateUrl: function (elem, attr) {
-				return 'components/utils/monthSelection' + attr.mode + '.html'
+				return 'components/utils/monthSelection/monthSelection' + attr.mode + '.html'
 			},
 			scope: {
 				onDateSelected: '&'
