@@ -20,9 +20,6 @@ angular.module('budgetTracker.home', ['budgetTracker.services'])
 			}]);
 	}])
 .controller('NavCtrl', ['$scope', '$location', 'Auth', function ($scope, $location, Auth) {
-		$scope.goHome = function () {
-			$location.path('home');
-		};
 		$scope.authData = Auth.$getAuth();
 		Auth.$onAuth(function (authData) {
 			$scope.authData = !!authData;

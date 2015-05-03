@@ -1,5 +1,8 @@
 {
-	"attributes": {},
+	"attributes": {
+		"ui-sref": {},
+		"ui-view": {}
+	},
 	"elements": {
 		"month-selection": {}
 	}

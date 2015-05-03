@@ -42,7 +42,7 @@
 	accent-color: #909090;
 */
 
-#content{
+body{
 	background-color: #C0C0C0;
 }
 
@@ -151,6 +151,10 @@ fieldset {
    float: left;
    margin-right: 25px;
    padding: 25px;
+}
+
+.jumbotron {
+	margin-bottom: 5px;
 }
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
