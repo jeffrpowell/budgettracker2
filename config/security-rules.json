@@ -1,55 +1,11 @@
 {
   "rules": {
-    ".read": false,
-    ".write": false,
-    "account_category": {
-      ".read": "auth.uid !== null",
-      ".write": "auth.uid !== null",
-      "$account_category_id": {
-        ".validate": "newData.hasChildren()",
-        "name": {".validate": "newData.isString() && newData.val().length > 0"},
-        "accounts": {
-          "$account_id": {".validate": "newData.isString()"}
-        },
-        "type": {".validate": "newData.val() == 'expense' || newData.val() == 'income' || newData.val() == 'bank'"},
-        "$other": { ".validate": false }
-      }
-    },
-    "account": {
-      ".read": "auth.uid !== null",
-      ".write": "auth.uid !== null",
-      "$account_id": {
-		".validate": "newData.hasChildren(['name', 'balance', 'category', 'category_type', 'goal_account'])",
-        "category": {".validate": "root.child('account_category/'+newData.val()).exists()"},
-		"category_type": {".validate": "newData.val() == 'expense' || newData.val() == 'income' || newData.val() == 'bank'"},
-		"name": {".validate": "newData.isString() && newData.val().length > 0"},
-        "balance": {".validate": "newData.isNumber()"},
-        "goal": {".validate": "newData.isNumber()"},
-        "goal_account": {".validate": "newData.isBoolean()"},
-        "parent_account": {".validate": "root.child('account/'+newData.val()).exists()"},
-        "$other": { ".validate": false }
-      }
-    },
-    "transaction": {
-      ".read": "auth.uid !== null",
-      ".write": "auth.uid !== null",
-      "$transaction_id": {
-        ".validate": "newData.hasChildren(['timestamp', 'to_account', 'to_account_name', 'from_account', 'from_account_name', 'amount', 'projection', 'memo'])",
-        "timestamp": {".validate": "newData.isNumber()"},
-        "to_account": {".validate": "root.child('account/'+newData.val()).exists()"},
-        "to_account_name": {".validate": "newData.isString()"},
-        "from_account": {".validate": "root.child('account/'+newData.val()).exists()"},
-        "from_account_name": {".validate": "newData.isString()"},
-        "amount": {".validate": "newData.isNumber()"},
-        "projection": {".validate": "newData.isBoolean()"},
-        "memo": {".validate": "newData.isString()"},
-        "$other": { ".validate": false }
-      }
-    },
+    ".read": true,
+    ".write": true,
 	"filterDate": {
       ".read": "auth.uid !== null",
       ".write": "auth.uid !== null",
-	  ".validate": "newData.isNumber()"
+	  ".validate": "newData.isNumber() && newData.val() > 201401 && newData.val() < 202012"
     }
   }
 }
