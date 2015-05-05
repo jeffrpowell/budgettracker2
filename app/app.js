@@ -10,7 +10,8 @@ angular.module('budgetTracker', [
 	'budgetTracker.utils.monthSelection',
 	'budgetTracker.login',
 	'budgetTracker.login.directives',
-	'budgetTracker.home'
+	'budgetTracker.home',
+	'budgetTracker.paycheck'
 ])
 
 .config(function ($stateProvider, $urlRouterProvider) {

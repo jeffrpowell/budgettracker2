@@ -10,6 +10,14 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 
 .factory('Date', ['fbutil', function (fbutil) {
 		return {
-			getFirebaseDate: fbutil.syncObject('filterDate', {})
+			getFirebaseDate: fbutil.firebaseObject('filterDate')
+		};
+	}])
+
+.factory('Budget', ['fbutil', function(fbutil){
+		return {
+			getBudgetForMonth: function(date){
+				return fbutil.firebaseArray('budgetTotals/'+date);
+			}
 		};
 	}]);
