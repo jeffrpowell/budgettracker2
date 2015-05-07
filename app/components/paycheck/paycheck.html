@@ -2,7 +2,14 @@
 	<div class='col-lg-10'>
 		<table class='table'>
 			<tr><th></th><th>Paycheck 1</th><th>Total</th></tr>
-			<tr><th>Income</th><th><input type="text"></th><th>7000</th></tr>
+			<tr><th>Income</th><th><input type="text" value="{{budget.income.$value}}"></th><th>{{budget.income.$value}}</th></tr>
+			<tr ng-repeat-start="category in budget.categories"><td>{{category.name}}</td><td colspan="2"></td></tr>
+			<tr ng-repeat="envelope in category.envelopes">
+				<td>{{envelope.name}}</td>
+				<td><input type="text" placeholder="{{envelope.allocation}}"></td>
+				<td><input type="text" placeholder="{{envelope.allocation}}"></td>
+			</tr>
+			<tr ng-repeat-end><td colspan="3"></td></tr>
 		</table>
 	</div>
 	<div class="col-lg-2">
