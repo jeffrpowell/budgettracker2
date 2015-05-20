@@ -24,10 +24,10 @@ angular.module('budgetTracker.utils.monthSelection', ['budgetTracker.services'])
 				BudgetDate.getBudgetDate().then(function(value){
 					var dateParts = extractDateParts(value.$value);
 					scope.budgetDate = new Date(dateParts.year, dateParts.month, 1, 0, 0, 0, 0);
+					scope.onDateSelected({newDate: value.$value});
 				});
 				var updateDate = function () {
 					var dateInt = extractDateInt(scope.budgetDate);
-					console.log("persisting "+dateInt);
 					BudgetDate.setBudgetDate(dateInt);
 					scope.onDateSelected({newDate: dateInt});
 				};
