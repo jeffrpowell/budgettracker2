@@ -2,24 +2,12 @@
 // a simple wrapper on Firebase and AngularFire to simplify deps and keep things DRY
 angular.module('firebase.utils', ['firebase', 'budgetTracker.config'])
 
-.factory('fbutil', ['$firebaseArray', '$firebaseObject', '$window', 'FBURL', 'CATEGORY_URL', 'ACCOUNT_URL', 'TRANSACTION_URL',
-	function ($firebaseArray, $firebaseObject, $window, FBURL, CATEGORY_URL, ACCOUNT_URL, TRANSACTION_URL) {
+.factory('fbutil', ['$firebaseArray', '$firebaseObject', '$window', 'FBURL',
+	function ($firebaseArray, $firebaseObject, $window, FBURL) {
 		"use strict";
 		
 		return {
 			ref: firebaseRef,
-			categoryRef: function(cid){
-				return firebaseRef(CATEGORY_URL + '/' + cid);
-			},
-			accountRef: function(aid){
-				return firebaseRef(ACCOUNT_URL + '/' + aid);
-			},
-			transactionRef: function(tid){
-				return firebaseRef(TRANSACTION_URL + '/' + tid);
-			},
-			categoryListRef: firebaseRef(CATEGORY_URL),
-			accountListRef: firebaseRef(ACCOUNT_URL),
-			transactionListRef: firebaseRef(TRANSACTION_URL),
 			firebaseArray: function (path) {
 				return $firebaseArray(firebaseRef(path));
 			},

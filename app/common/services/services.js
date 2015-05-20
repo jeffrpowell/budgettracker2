@@ -8,9 +8,17 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 		return $firebaseAuth(fbutil.ref());
 	}])
 
-.factory('Date', ['fbutil', function (fbutil) {
+.factory('BudgetDate', ['fbutil', function (fbutil) {
 		return {
-			getFirebaseDate: fbutil.firebaseObject('filterDate')
+			getBudgetDate: function () {
+				return fbutil.firebaseObject('budgetDate').$loaded();
+			},
+			setBudgetDate: function(dateInt){
+				fbutil.firebaseObject('budgetDate').$loaded(function($obj){
+					$obj.$value = dateInt;
+					$obj.$save();
+				});
+			}
 		};
 	}])
 

@@ -16,7 +16,7 @@
     "angularfire": "^1.x.x",
     "mockfirebase": "^0.x.x",
     "html5-boilerplate": "^4.x.0",
-    "angular-strap": "^2.x.x",
+    "angular-bootstrap": "^0.12.0",
 	"angular-xeditable": "^0.x.x"
   }
 }

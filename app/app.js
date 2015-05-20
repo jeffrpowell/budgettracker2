@@ -2,7 +2,7 @@
 
 // Declare app level module which depends on views, and components
 angular.module('budgetTracker', [
-	'mgcrea.ngStrap',
+	'ui.bootstrap',
 	'xeditable',
 	'ui.router',
 	'budgetTracker.config',
@@ -50,7 +50,3 @@ angular.module('budgetTracker', [
 		});
 
 	}])
-
-.run(['editableOptions', function (editableOptions) {
-		editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
-	}]);

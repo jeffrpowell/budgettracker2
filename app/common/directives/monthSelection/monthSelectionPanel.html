@@ -3,8 +3,11 @@
 		<h3 class="panel-title">Select Date</h3>
 	</div>
 	<div class="panel-body text-center">
-		<button type="button" class="btn btn-default" ng-model="filterDate" bs-datepicker>
-			{{filterDate | date: 'MMMM y'}}
-		</button>
+		<datepicker ng-model="budgetDate" 
+					datepicker-mode="'month'"
+					min-mode="month"
+					max-mode="year"
+					show-weeks="false"
+					year-range="5"></datepicker>
 	</div>
 </div>
