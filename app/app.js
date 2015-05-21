@@ -6,39 +6,15 @@ angular.module('budgetTracker', [
 	'xeditable',
 	'ui.router',
 	'budgetTracker.config',
+	'budgetTracker.stateConfig',
 	'budgetTracker.filters',
 	'budgetTracker.utils.monthSelection',
 	'budgetTracker.login',
 	'budgetTracker.login.directives',
 	'budgetTracker.home',
-	'budgetTracker.paycheck'
+	'budgetTracker.paycheck',
+	'budgetTracker.accounts'
 ])
-
-.config(function ($stateProvider, $urlRouterProvider) {
-	// For any unmatched url, redirect to /state1
-	$urlRouterProvider.otherwise("/home");
-
-	// Now set up the states
-	$stateProvider
-	.state('home', {
-		url: "/home",
-		templateUrl: "components/home/home.html",
-		controller: "HomeCtrl",
-		authenticate: true
-	})
-	.state('login', {
-		url: "/login",
-		templateUrl: "components/login/login.html",
-		controller: 'LoginCtrl',
-		authenticate: false
-	})
-	.state('paycheck', {
-		url: "/paycheck",
-		templateUrl: "components/paycheck/paycheck.html",
-		controller: 'PaycheckCtrl',
-		authenticate: true
-	});
-})
 
 .run(['$rootScope', '$state', 'Auth', function ($rootScope, $state, Auth) {
 		$rootScope.$on("$stateChangeStart",
@@ -48,5 +24,4 @@ angular.module('budgetTracker', [
 				$state.go("login");
 			}
 		});
-
-	}])
+	}]);
