@@ -14,8 +14,20 @@ angular.module('budgetTracker.filters', []).filter('checkmark', function () {
 	};
 }])
 
-.filter('reverse', function () {
+.filter('reverse', [function () {
 	return function (items) {
 		return items.slice().reverse();
 	};
-});
+}])
+
+.filter('removeUndef', [function(){
+	return function(inputArr){
+		var output = [];
+		angular.forEach(inputArr, function(value, key){
+			if (key !== undefined && value !== undefined){
+				this.push(value);
+			}
+		}, output);
+		return output;
+	};
+}]);

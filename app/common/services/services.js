@@ -30,7 +30,7 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 		return {
 			getBudgetForMonth: function(date){
 				budgetObj.income = fbutil.firebaseObject('budgetTotals/'+date+'/income');
-				fbutil.firebaseArray('budgetTotals/'+date+'/categories').$loaded(function(vals){
+				return fbutil.firebaseObject('budgetTotals/'+date);/*.$loaded(function(vals){
 					var categories = [];
 					angular.forEach(vals, function(categoryValue, dummyCategoryKey){
 						var envelopes = [];
@@ -42,8 +42,12 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 						this.push({name: categoryValue.name, envelopes: envelopes});
 					}, categories);
 					budgetObj.categories = categories;
-				});
-				return budgetObj;
+					return budgetObj;
+				});*/
 			}
 		};
+	}])
+
+.factory('Categories', ['fbutil', function(fbutil){
+		return fbutil.firebaseArray('categories');
 	}]);
