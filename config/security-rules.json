@@ -27,10 +27,12 @@
       "$category_id": {
         ".validate": "newData.hasChildren(['name'])",
         "name": {".validate": "newData.isString()"},
+		"key": {".validate": "newData.val() === $category_id"},
         "envelopes": {
           "$envelope_id": {
             ".validate": "newData.hasChildren(['name'])",
             "name": {".validate": "newData.isString()"},
+			"key": {".validate": "newData.val() === $envelope_id"},
             "$other": { ".validate": false }
           }
         },
