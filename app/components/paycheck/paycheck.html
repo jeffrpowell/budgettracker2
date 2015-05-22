@@ -11,15 +11,6 @@
 			</tr>
 			<tr ng-repeat-end><td colspan="3"></td></tr>
 		</table>
-		<ul>
-			<li ng-repeat="category in categories | removeUndef" >{{category.name}}
-				<ul>
-					<li ng-repeat="envelope in category.envelopes | removeUndef">
-						{{envelope.name}}
-					</li>
-				</ul>
-			</li>
-		</ul>
 	</div>
 	<div class="col-lg-4">
 		<month-selection mode="Panel" on-date-selected="changeDate(newDate)"></month-selection>

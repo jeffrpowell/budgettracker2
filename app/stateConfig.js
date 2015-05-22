@@ -23,14 +23,10 @@ angular.module('budgetTracker.stateConfig', ['ui.router'])
 		controller: 'PaycheckCtrl',
 		authenticate: true
 	})
-	.state('accounts', {
-		url: "/accounts",
-		templateUrl: "components/accounts/accounts.html",
-		controller: 'AccountCtrl',
-		authenticate: true
-	})
-	.state('accounts.edit', {
-		templateUrl: "components/accounts/accounts.edit.html",
+	.state('envelopes', {
+		url: "/envelopes",
+		templateUrl: "components/envelopes/envelopes.html",
+		controller: 'EnvelopeCtrl',
 		authenticate: true
 	});
 });

@@ -1,0 +1,48 @@
+<div class="row">
+	<div class="col-xs-6">
+		<ul>
+			<li ng-repeat="category in categories | removeUndef" >
+				<button type="button"
+						class="btn btn-link btn-lg"
+						ng-click="assignCategory(category)">{{category.name}}</button>
+				<ul>
+					<li ng-repeat="envelope in category.envelopes | removeUndef">
+						<button type="button"
+								class="btn btn-link btn-lg"
+								ng-click="assignEnvelope(envelope)">{{envelope.name}}</button>
+					</li>
+					<li>
+						<button type="button" 
+								class="btn btn-link btn-lg" 
+								ng-click="addEnvelope[category.key] = true" 
+								ng-hide="addEnvelope[category.key]">Add Envelope</button>
+						<input type="text" 
+							   class="input-lg"
+							   ng-model="newEnvelopes[category.key]" 
+							   ng-show="addEnvelope[category.key]" 
+							   placeholder="Envelope Name" 
+							   ng-keydown="keyListener($event, category.key)">
+					</li>
+				</ul>
+			</li>
+			<li>
+				<button type="button" 
+						class="btn btn-link btn-lg" 
+						ng-click="addCategory = true" 
+						ng-hide="addCategory">Add Category</button>
+				<input type="text" 
+					   class="input-lg"
+					   ng-model="newCategory" 
+					   ng-show="addCategory" 
+					   placeholder="Category Name" 
+					   ng-keydown="keyListener($event, false)">
+			</li>
+		</ul>
+	</div>
+	<div ng-show="categoryToEdit" class="col-xs-6">
+		Category: {{categoryToEdit.name}}
+	</div>
+	<div ng-show="envelopeToEdit" class="col-xs-6">
+		Envelope: {{envelopeToEdit.name}}
+	</div>
+</div>

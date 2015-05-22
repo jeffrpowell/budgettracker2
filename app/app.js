@@ -13,7 +13,7 @@ angular.module('budgetTracker', [
 	'budgetTracker.login.directives',
 	'budgetTracker.home',
 	'budgetTracker.paycheck',
-	'budgetTracker.accounts'
+	'budgetTracker.envelopes'
 ])
 
 .run(['$rootScope', '$state', 'Auth', function ($rootScope, $state, Auth) {

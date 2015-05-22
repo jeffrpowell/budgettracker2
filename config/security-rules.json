@@ -1,11 +1,45 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true,
-	"filterDate": {
-      ".read": "auth.uid !== null",
-      ".write": "auth.uid !== null",
-	  ".validate": "newData.isNumber() && newData.val() > 201401 && newData.val() < 202012"
-    }
+    ".read": "auth.uid !== null",
+    ".write": "auth.uid !== null",
+    "budgetTotals": {
+      "$date": {
+        "categories": {
+          "$category_id": {
+            ".validate": "root.child('categories/'+$category_id).exists() && newData.hasChildren(['name'])",
+            "name": {".validate": "newData.isString()"},
+            "envelopes": {
+              "$envelope_id": {
+                ".validate": "root.child('categories/'+$category_id+'/envelopes/'+$envelope_id).exists() && newData.hasChildren(['name', 'allocation'])",
+                "name": {".validate": "newData.isString()"},
+                "allocation": {".validate": "newData.isNumber()"},
+                "usage": {".validate": "newData.isNumber()"},
+                "$other": { ".validate": false }
+              }
+            },
+            "$other": { ".validate": false }
+          }
+        },
+        "$other": { ".validate": false }
+      }
+    },
+    "categories": {
+      "$category_id": {
+        ".validate": "newData.hasChildren(['name'])",
+        "name": {".validate": "newData.isString()"},
+        "envelopes": {
+          "$envelope_id": {
+            ".validate": "newData.hasChildren(['name'])",
+            "name": {".validate": "newData.isString()"},
+            "$other": { ".validate": false }
+          }
+        },
+        "$other": { ".validate": false }
+      }
+    },
+  	"filterDate": {
+  	  ".validate": "newData.isNumber() && newData.val() > 201401 && newData.val() < 202012"
+    },
+    "$other": { ".validate": false }
   }
 }

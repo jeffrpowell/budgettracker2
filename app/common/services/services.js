@@ -50,5 +50,28 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 	}])
 
 .factory('Categories', ['fbutil', function(fbutil){
-		return fbutil.firebaseArray('categories');
+		return {
+			get: function(){
+				return fbutil.firebaseObject('categories');
+			},
+			add: function(name){
+				var categories = fbutil.firebaseArray('categories');
+				categories.$add({name: name}).then(function(ref){
+					var key = ref.key();
+					ref.child('key').set(key);
+				});
+			}
+		};
+	}])
+
+.factory('Envelopes', ['fbutil', function(fbutil){
+		return {
+			add: function(categoryKey, name){
+				var categoryEnvelopes = fbutil.firebaseArray('categories/'+categoryKey+'/envelopes');
+				categoryEnvelopes.$add({name: name}).then(function(ref){
+					var key = ref.key();
+					ref.child('key').set(key);
+				});
+			}
+		};
 	}]);
