@@ -3,11 +3,11 @@
 		<table class='table'>
 			<tr><th></th><th>Paycheck 1</th><th>Total</th></tr>
 			<tr><th>Income</th><td><input type="text" value="{{budget.income}}"></td><td>{{budget.income}}</td></tr>
-			<tr ng-repeat-start="(categoryKey, category) in categories | removeUndef"><th>{{category.name}}</th><td colspan="2"></td></tr>
-			<tr ng-repeat="(envelopeKey, envelope) in category.envelopes | removeUndef">
+			<tr ng-repeat-start="category in categories | removeUndef"><th>{{category.name}}</th><td colspan="2"></td></tr>
+			<tr ng-repeat="envelope in category.envelopes | removeUndef">
 				<td>{{envelope.name}}</td>
-				<td><input type="text" placeholder="{{budget.categories[categoryKey].envelopes[envelopeKey].allocation}}"></td>
-				<td>{{budget.categories[categoryKey].envelopes[envelopeKey].allocation}}</td>
+				<td><input type="text" placeholder="{{budget.categories[category.key].envelopes[envelope.key].allocation}}"></td>
+				<td>{{budget.categories[category.key].envelopes[envelope.key].allocation}}</td>
 			</tr>
 			<tr ng-repeat-end><td colspan="3"></td></tr>
 		</table>

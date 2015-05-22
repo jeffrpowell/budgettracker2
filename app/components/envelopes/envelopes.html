@@ -40,7 +40,18 @@
 		</ul>
 	</div>
 	<div ng-show="categoryToEdit" class="col-xs-6">
-		Category: {{categoryToEdit.name}}
+		<h1>Edit Category "{{categoryToEdit.name}}"</h1>
+		<div class="row">
+			<div class="col-xs-6">
+				<form ng-submit="updateCategory()">
+					<div class="form-group">
+						<label for="categoryName">Category Name</label>
+						<input type="text" class="form-control" id="categoryName" ng-model="categoryToEdit.name">
+					</div>
+					<button type="submit" class="btn btn-success">Save Changes</button>
+				</form>
+			</div>
+		</div>
 	</div>
 	<div ng-show="envelopeToEdit" class="col-xs-6">
 		Envelope: {{envelopeToEdit.name}}

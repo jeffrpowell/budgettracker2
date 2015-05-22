@@ -32,6 +32,10 @@ angular.module('budgetTracker.envelopes', [])
 			$scope.envelopeToEdit = false;
 			$scope.categoryToEdit = category;
 		};
+		$scope.updateCategory = function(){
+			Categories.update($scope.categoryToEdit);
+		};
+		
 		$scope.assignEnvelope = function(envelope){
 			$scope.categoryToEdit = false;
 			$scope.envelopeToEdit = envelope;

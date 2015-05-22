@@ -60,6 +60,14 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 					var key = ref.key();
 					ref.child('key').set(key);
 				});
+			},
+			update: function(categoryObj){
+				var baseRef = fbutil.ref('categories/'+categoryObj.key);
+				angular.forEach(categoryObj, function(value, key){
+					if (key !== "$$hashKey"){
+						baseRef.child(key).set(value);
+					}
+				}, baseRef);
 			}
 		};
 	}])
