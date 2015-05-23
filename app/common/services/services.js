@@ -54,6 +54,9 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 			get: function(){
 				return fbutil.firebaseObject('categories');
 			},
+			find: function(categoryKey){
+				return fbutil.firebaseObject('categories/'+categoryKey);
+			},
 			add: function(name){
 				var categories = fbutil.firebaseArray('categories');
 				categories.$add({name: name}).then(function(ref){
@@ -80,6 +83,9 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 					var key = ref.key();
 					ref.child('key').set(key);
 				});
+			},
+			find: function(categoryKey, envelopeKey){
+				return fbutil.firebaseObject('categories/'+categoryKey+'/envelopes/'+envelopeKey);
 			}
 		};
 	}]);

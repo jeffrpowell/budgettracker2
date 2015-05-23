@@ -9,7 +9,7 @@
 					<li ng-repeat="envelope in category.envelopes | removeUndef">
 						<button type="button"
 								class="btn btn-link btn-lg"
-								ng-click="assignEnvelope(envelope)">{{envelope.name}}</button>
+								ng-click="assignEnvelope(category, envelope)">{{envelope.name}}</button>
 					</li>
 					<li>
 						<button type="button" 
@@ -43,17 +43,26 @@
 		<h1>Edit Category "{{categoryToEdit.name}}"</h1>
 		<div class="row">
 			<div class="col-xs-6">
-				<form ng-submit="updateCategory()">
-					<div class="form-group">
-						<label for="categoryName">Category Name</label>
-						<input type="text" class="form-control" id="categoryName" ng-model="categoryToEdit.name">
-					</div>
-					<button type="submit" class="btn btn-success">Save Changes</button>
-				</form>
+				<small>Changes are saved automatically</small>
+				<br>
+				<div class="form-group">
+					<label for="categoryName">Category Name</label>
+					<input type="text" class="form-control" id="categoryName" ng-model="categoryToEdit.name">
+				</div>
 			</div>
 		</div>
 	</div>
 	<div ng-show="envelopeToEdit" class="col-xs-6">
-		Envelope: {{envelopeToEdit.name}}
+		<h1>Edit Envelope "{{envelopeToEdit.name}}"</h1>
+		<div class="row">
+			<div class="col-xs-6">
+				<small>Changes are saved automatically</small>
+				<br>
+				<div class="form-group">
+					<label for="envelopeName">Envelope Name</label>
+					<input type="text" class="form-control" id="envelopeName" ng-model="envelopeToEdit.name">
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
