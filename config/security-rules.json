@@ -14,15 +14,12 @@
                 ".validate": "root.child('categories/'+$category_id+'/envelopes/'+$envelope_id).exists() && newData.hasChildren(['name', 'allocation'])",
                 "name": {".validate": "newData.isString()"},
                 "allocation": {".validate": "newData.isNumber()"},
-                "usage": {".validate": "newData.isNumber()"},
-                "$other": { ".validate": false }
+                "usage": {".validate": "newData.isNumber()"}
               }
-            },
-            "$other": { ".validate": false }
+            }
           }
         },
-		"income": {".validate": "newData.isNumber()"},
-        "$other": { ".validate": false }
+		"income": {".validate": "newData.isNumber()"}
       }
     },
     "categories": {
@@ -34,11 +31,9 @@
           "$envelope_id": {
             ".validate": "newData.hasChildren(['name'])",
             "name": {".validate": "newData.isString()"},
-			"key": {".validate": "newData.val() === $envelope_id"},
-            "$other": { ".validate": false }
+			"key": {".validate": "newData.val() === $envelope_id"}
           }
-        },
-        "$other": { ".validate": false }
+        }
       }
     },
   	"filterDate": {
