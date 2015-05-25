@@ -21,6 +21,7 @@
             "$other": { ".validate": false }
           }
         },
+		"income": {".validate": "newData.isNumber()"},
         "$other": { ".validate": false }
       }
     },
