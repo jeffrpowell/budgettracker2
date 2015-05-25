@@ -32,12 +32,19 @@ angular.module('budgetTracker.envelopes', [])
 			$scope.envelopeToEdit = false;
 			Categories.find(category.key).$bindTo($scope, 'categoryToEdit');
 		};
-		$scope.updateCategory = function(){
-			Categories.update($scope.categoryToEdit);
+		$scope.removeCategory = function(){
+			Categories.remove($scope.categoryToEdit.key);
+			$scope.categoryToEdit = false;
 		};
 		
 		$scope.assignEnvelope = function(category, envelope){
 			$scope.categoryToEdit = false;
 			Envelopes.find(category.key, envelope.key).$bindTo($scope, 'envelopeToEdit');
+			$scope.envelopesCategory = category.key;
+		};
+		$scope.removeEnvelope = function(){
+			Envelopes.remove($scope.envelopesCategory, $scope.envelopeToEdit.key);
+			$scope.envelopeToEdit = false;
+			$scope.envelopesCategory = undefined;
 		};
 }]);

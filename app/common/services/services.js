@@ -31,10 +31,12 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 			 * {income: Integer,
 			 *	categories: [
 			 *		categoryKey: {
+			 *			key: FirebaseKey
 			 *			name: String,
 			 *			envelopes: [
 			 *				envelopeKey: {
 			 *					allocation: Float
+			 *					key: FirebaseKey
 			 *					name: String
 			 *					usage: Float
 			 *				}
@@ -64,13 +66,8 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 					ref.child('key').set(key);
 				});
 			},
-			update: function(categoryObj){
-				var baseRef = fbutil.ref('categories/'+categoryObj.key);
-				angular.forEach(categoryObj, function(value, key){
-					if (key !== "$$hashKey"){
-						baseRef.child(key).set(value);
-					}
-				}, baseRef);
+			remove: function(categoryKey){
+				fbutil.firebaseObject('categories/'+categoryKey).$remove();
 			}
 		};
 	}])
@@ -86,6 +83,9 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 			},
 			find: function(categoryKey, envelopeKey){
 				return fbutil.firebaseObject('categories/'+categoryKey+'/envelopes/'+envelopeKey);
+			},
+			remove: function(categoryKey, envelopeKey){
+				fbutil.firebaseObject('categories/'+categoryKey+'/envelopes/'+envelopeKey).$remove();
 			}
 		};
 	}]);
