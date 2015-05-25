@@ -2,6 +2,7 @@
   "rules": {
     ".read": "auth.uid !== null",
     ".write": "auth.uid !== null",
+	"budgetDate": {".validate": "newData.isNumber()"},
     "budgetTotals": {
       "$date": {
         "categories": {
