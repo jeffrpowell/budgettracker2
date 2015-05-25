@@ -7,19 +7,19 @@
       "$date": {
         "categories": {
           "$category_id": {
-            ".validate": "root.child('categories/'+$category_id).exists() && newData.hasChildren(['name'])",
+            ".validate": "root.child('categories/'+$category_id).exists()",
             "name": {".validate": "newData.isString()"},
             "envelopes": {
               "$envelope_id": {
-                ".validate": "root.child('categories/'+$category_id+'/envelopes/'+$envelope_id).exists() && newData.hasChildren(['name', 'allocation'])",
-                "name": {".validate": "newData.isString()"},
-                "allocation": {".validate": "newData.isNumber()"},
-                "usage": {".validate": "newData.isNumber()"}
+                ".validate": "root.child('categories/'+$category_id+'/envelopes/'+$envelope_id).exists()",
+                "name": {},
+                "allocation": {},
+                "usage": {}
               }
             }
           }
         },
-		"income": {".validate": "newData.isNumber()"}
+		"income": {}
       }
     },
     "categories": {

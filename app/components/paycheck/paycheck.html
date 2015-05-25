@@ -6,8 +6,11 @@
 			<tr ng-repeat-start="category in categories | removeUndef"><th>{{category.name}}</th><td colspan="2"></td></tr>
 			<tr ng-repeat="envelope in category.envelopes | removeUndef">
 				<td>{{envelope.name}}</td>
-				<td><input type="text" placeholder="{{budget.categories[category.key].envelopes[envelope.key].allocation}}"></td>
-				<td>{{budget.categories[category.key].envelopes[envelope.key].allocation}}</td>
+				<td><input type="text" 
+						   placeholder="{{budget.categories[category.key].envelopes[envelope.key].suggestion}}"
+						   ng-model="budget.categories[category.key].envelopes[envelope.key].allocation"
+						   ng-change="updateNextMonthsSuggestion(category.key, envelope.key)"></td>
+				<td>[running total]</td>
 			</tr>
 			<tr ng-repeat-end><td colspan="3"></td></tr>
 		</table>

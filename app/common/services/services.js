@@ -9,6 +9,13 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 	}])
 
 .factory('BudgetDate', ['fbutil', function (fbutil) {
+		//Expects integer with date format 'yyyyMM'
+		var getDateParts = function(budgetDate){
+			var parts = {};
+			parts.month = budgetDate % 100-1;
+			parts.year = Math.floor(budgetDate / 100);
+			return parts;
+		};
 		return {
 			getBudgetDate: function () {
 				return fbutil.firebaseObject('budgetDate').$loaded();
@@ -18,11 +25,23 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 					$obj.$value = dateInt;
 					$obj.$save();
 				});
+			},
+			extractDateParts: function(budgetDate){
+				return getDateParts(budgetDate);
+			},
+			findNextMonth: function(thisMonth){
+				var parts = getDateParts(thisMonth);
+				parts.month+=2;
+				if (parts.month > 12){
+					parts.month = 1;
+					parts.year++;
+				}
+				return parts.year * 100 + parts.month;
 			}
 		};
 	}])
 
-.factory('Budget', ['fbutil', function(fbutil){
+.factory('Budget', ['fbutil', 'BudgetDate', function(fbutil, BudgetDate){
 		return {
 			/**
 			 * 
@@ -38,6 +57,7 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 			 *					allocation: Float
 			 *					key: FirebaseKey
 			 *					name: String
+			 *					suggestion: Float
 			 *					usage: Float
 			 *				}
 			 *			]
@@ -47,6 +67,12 @@ angular.module('budgetTracker.services', ['firebase.utils'])
 			 */
 			getBudgetForMonth: function(date){
 				return fbutil.firebaseObject('budgetTotals/'+date);
+			},
+			updateNextMonthsSuggestion: function(thisMonthsDate, categoryKey, envelopeKey, amount){
+				var nextMonth = BudgetDate.findNextMonth(thisMonthsDate);
+				var nextMonthEnvelope = fbutil.firebaseObject('budgetTotals/'+nextMonth+'/categories/'+categoryKey+'/envelopes/'+envelopeKey);
+				nextMonthEnvelope['suggestion'] = amount;
+				nextMonthEnvelope.$save();
 			}
 		};
 	}])
