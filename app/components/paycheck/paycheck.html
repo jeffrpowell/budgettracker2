@@ -2,7 +2,7 @@
 	<div class='col-lg-8'>
 		<table class='table'>
 			<tr><th></th><th>Paycheck 1</th><th>Total</th></tr>
-			<tr><th>Income</th><td><input type="text" ng-model="budget.income"></td><td>{{budget.income}}</td></tr>
+			<tr><th>Income</th><td><input type="text" ng-model="budget.income" ng-change="refreshTotals()"></td><td>{{budget.income}}</td></tr>
 			<tr ng-repeat-start="category in categories | removeUndef"><th>{{category.name}}</th><td colspan="2"></td></tr>
 			<tr ng-repeat="envelope in category.envelopes | removeUndef">
 				<td>{{envelope.name}}</td>
@@ -10,7 +10,7 @@
 						   placeholder="{{budget.categories[category.key].envelopes[envelope.key].suggestion}}"
 						   ng-model="budget.categories[category.key].envelopes[envelope.key].allocation"
 						   ng-change="updateNextMonthsSuggestion(category.key, envelope.key)"></td>
-				<td>[running total]</td>
+				<td>{{runningTotal[envelope.key]}}</td>
 			</tr>
 			<tr ng-repeat-end><td colspan="3"></td></tr>
 		</table>
